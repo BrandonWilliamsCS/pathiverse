@@ -1,41 +1,58 @@
-import { BehaviorSubject, Subject, Observable, Subscription } from "rxjs";
-import { map } from "rxjs/operators";
-
 import { Action } from "../Action";
+import { State } from "../State";
+import { ActionHandler } from "./ActionHandler";
+import { ContentResovler } from "./ContentResolver";
 import { Renderer } from "./Renderer";
 import { StateManager } from "./StateManager";
 
-export class StateMachine<AType extends string, S> {
-  private readonly stateSubject: BehaviorSubject<S>;
-  private readonly subscription: Subscription
-
+export class StateMachine<
+  AType extends string,
+  CType extends string,
+  S extends State<AType, CType>
+> {
   public get currentState(): S {
-    return this.stateSubject.value;
-  }
-
-  public get stateStream(): Observable<S> {
-    return this.stateSubject;
+    return this.stateManager.currentState;
   }
 
   constructor(
-    stateManager: StateManager<AType, S>,
-    render: Renderer<AType, S>,
-  ) {
-    this.stateSubject = new BehaviorSubject<S>(stateManager.currentState);
-    const actionObserver = new Subject<Action<AType>>();
-    const actionHandlerForRenderer = {
-      canHandle: stateManager.canHandle.bind(stateManager),
-      handle: actionObserver.next,
-    };
+    private readonly stateManager: StateManager<AType, CType, S>,
+    private readonly resolveContent: ContentResovler<CType>,
+    private readonly render: Renderer<AType, CType, S>,
+  ) {}
 
-    this.subscription = actionObserver
-      .pipe(map((action) => stateManager.apply(action)))
-      .subscribe((newState) => {
-        render(newState, actionHandlerForRenderer);
-      });
+  public async start() {
+    let statePromise = Promise.resolve(this.stateManager.currentState);
+    // TODO: support some sort of cancellation
+    while (true) {
+      // First get the stuff to be rendered
+      const nextState = await statePromise;
+      const nextContent = await this.resolveContent(
+        nextState.currentScene.contentIndicator,
+      );
+      let actionHandler: ActionHandler<AType>;
+      // Then split the state manager into:
+      [
+        // a generic handler to pass to the renderer,
+        actionHandler,
+        // and a promise that resolves with the state that comes from its application.
+        statePromise,
+      ] = this.splitStateManagerApplication();
+      // Finally, pass everything along and let the cycle continue.
+      this.render(nextState, nextContent, actionHandler);
+    }
   }
 
-  public dispose() {
-    this.subscription.unsubscribe();
+  private splitStateManagerApplication(): [ActionHandler<AType>, Promise<S>] {
+    // Finagle the resolver from the promise so we can use it as the action handler.
+    let handle!: (action: Action<AType>) => void;
+    const statePromise = new Promise<Action<AType>>((resolve) => {
+      handle = resolve;
+    }).then((action) => this.stateManager.apply(action));
+    // The consumer can pass the handler along and listen for when it's called.
+    const actionHandler: ActionHandler<AType> = {
+      canHandle: this.stateManager.canHandle.bind(this.stateManager),
+      handle,
+    };
+    return [actionHandler, statePromise];
   }
 }
