@@ -44,15 +44,11 @@ export class StateMachine<
 
   private splitStateManagerApplication(): [ActionHandler<AType>, Promise<S>] {
     // Finagle the resolver from the promise so we can use it as the action handler.
-    let handle!: (action: Action<AType>) => void;
+    let actionHandler!: (action: Action<AType>) => void;
     const statePromise = new Promise<Action<AType>>((resolve) => {
-      handle = resolve;
+      actionHandler = resolve;
     }).then((action) => this.stateManager.apply(action));
     // The consumer can pass the handler along and listen for when it's called.
-    const actionHandler: ActionHandler<AType> = {
-      canHandle: this.stateManager.canHandle.bind(this.stateManager),
-      handle,
-    };
     return [actionHandler, statePromise];
   }
 }

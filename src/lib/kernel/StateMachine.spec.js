@@ -141,9 +141,6 @@ const testScene = {
 
 class TestStateManager extends StateManager {
   currentState = { currentScene: testScene, forAction: undefined };
-  canHandle() {
-    return true;
-  }
   apply(action) {
     this.currentState = { currentScene: testScene, forAction: action };
     return Promise.resolve(this.currentState);
@@ -185,7 +182,7 @@ class TestRendererWrapper {
     this.renderArgsPromises.push(promise);
     if (action) {
       promise.then((args) => {
-        args.actionHandler.handle(action);
+        args.actionHandler(action);
       });
     }
   }
