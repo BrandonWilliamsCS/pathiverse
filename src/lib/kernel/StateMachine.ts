@@ -1,5 +1,5 @@
 import { Action } from "../Action";
-import { State } from "../State";
+import { SceneState } from "../State";
 import { ActionHandler } from "./ActionHandler";
 import { ContentResovler } from "./ContentResolver";
 import { Renderer } from "./Renderer";
@@ -8,14 +8,14 @@ import { StateManager } from "./StateManager";
 export class StateMachine<
   AType extends string,
   CType extends string,
-  S extends State<AType, CType>
+  S extends SceneState<AType, CType>
 > {
   public get currentState(): S {
     return this.stateManager.currentState;
   }
 
   constructor(
-    private readonly stateManager: StateManager<AType, CType, S>,
+    private readonly stateManager: StateManager<AType, S>,
     private readonly resolveContent: ContentResovler<CType>,
     private readonly render: Renderer<AType, CType, S>,
   ) {}

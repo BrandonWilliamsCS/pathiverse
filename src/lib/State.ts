@@ -1,5 +1,7 @@
 import { Scene } from "./Scene";
 
-export interface State<AType extends string, CType extends string> {
+export type State = any;
+
+export interface SceneState<AType extends string, CType extends string> {
   currentScene: Scene<AType, CType>;
 }
