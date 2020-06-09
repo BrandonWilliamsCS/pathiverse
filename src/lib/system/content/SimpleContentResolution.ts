@@ -3,6 +3,9 @@ import { Content, ContentIndicator } from "../../Content";
 import { ContentBuilder } from "./ContentBuilder";
 import { ContentRetriever } from "./ContentRetriever";
 
+/**
+ * Splits content resolution into two parts: retrieval and formatting.
+ */
 export class SimpleContentResolution<CType extends string, R> {
   public get resolver(): ContentResovler<CType> {
     return this.resolve;

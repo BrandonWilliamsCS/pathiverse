@@ -5,6 +5,10 @@ import { ContentResovler } from "./ContentResolver";
 import { Renderer } from "./Renderer";
 import { StateManager } from "./StateManager";
 
+/**
+ * The core mechanic for an action-based state machine.
+ * Current state is presented to a renderer, which presents actions that ultimately update state and restart the cycle.
+ */
 export class StateMachine<
   AType extends string,
   CType extends string,

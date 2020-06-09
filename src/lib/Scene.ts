@@ -1,6 +1,9 @@
 import { Action } from "./Action";
 import { ContentIndicator } from "./Content";
 
+/**
+ * A descriptive overview of a single, discrete element of a Story within a World.
+ */
 export interface Scene<AType extends string, CType extends string> {
   world: string;
   story: string;
