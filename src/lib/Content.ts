@@ -4,4 +4,5 @@ export interface Content<CType extends string> {
 
 export interface ContentIndicator<CType extends string> {
   type: CType;
+  name: string;
 }
