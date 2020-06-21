@@ -30,22 +30,16 @@ export function buildStateManager<
   baseWorldStateManager: StateManager<AType, SWorld>,
   stateStorageFactory: StorageFactory<State>,
 ): StateManager<AType, SSession & SWorld> {
-  const transformedSubStateManagerMap = mapValues(
+  const combinedSessionStateManager = new CompoundStateManager(
     sessionSubStateManagerMap,
-    (subStateManager, key) =>
-      buildStoredStateManager(
-        [key],
-        worldName,
-        sessionName,
-        stateStorageFactory,
-        subStateManager,
-      ),
-  ) as SubStateManagerMap<AType, SSession>;
-  const sessionStateManager = new CompoundStateManager(
-    transformedSubStateManagerMap,
+  );
+  const sessionStateManager = buildStoredStateManager(
+    worldName,
+    sessionName,
+    stateStorageFactory as StorageFactory<SSession>,
+    combinedSessionStateManager,
   );
   const worldStateManager = buildStoredStateManager(
-    [],
     worldName,
     undefined,
     stateStorageFactory as StorageFactory<SWorld>,
@@ -55,27 +49,17 @@ export function buildStateManager<
 }
 
 function buildStoredStateManager<AType extends string, S>(
-  keyPath: string[],
   worldName: string,
   sessionName: string | undefined,
   stateStorageFactory: StorageFactory<S>,
   baseStateManager: StateManager<AType, S>,
 ): StateManager<AType, S> {
-  const storagePath = getStoragePath(worldName, sessionName, keyPath);
+  const storagePath = getStoragePath(worldName, sessionName);
   const storage = stateStorageFactory(storagePath);
   const manager = new StoredStateManager(baseStateManager, storage);
   return manager;
 }
 
-function getStoragePath(
-  worldName: string,
-  sessionName: string | undefined,
-  keyPath: string[],
-) {
-  const elements = [
-    sessionName ? "Sessions" : "Worlds",
-    sessionName ?? worldName,
-    ...keyPath,
-  ];
-  return `/${elements.join("/")}`;
+function getStoragePath(worldName: string, sessionName: string | undefined) {
+  return sessionName ? `/Sessions/${sessionName}` : `/Worlds/${worldName}`;
 }

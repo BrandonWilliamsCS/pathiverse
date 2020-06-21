@@ -163,17 +163,16 @@ describe("buildStateManager", () => {
         }),
       );
       expect(writeSpy).toHaveBeenCalledWith(
-        "/Sessions/SessionName/part1",
+        "/Sessions/SessionName",
         expect.objectContaining({
-          "session.part1": "session.part1",
-          forAction: action,
-        }),
-      );
-      expect(writeSpy).toHaveBeenCalledWith(
-        "/Sessions/SessionName/part2",
-        expect.objectContaining({
-          "session.part2": "session.part2",
-          forAction: action,
+          part1: {
+            "session.part1": "session.part1",
+            forAction: action,
+          },
+          part2: {
+            "session.part2": "session.part2",
+            forAction: action,
+          },
         }),
       );
     });
