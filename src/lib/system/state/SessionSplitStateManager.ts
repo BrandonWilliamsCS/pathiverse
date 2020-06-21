@@ -1,4 +1,5 @@
 import { Action } from "../../Action";
+import { State } from "../../State";
 import { StateManager } from "../../kernel/StateManager";
 
 /**
@@ -6,28 +7,29 @@ import { StateManager } from "../../kernel/StateManager";
  */
 export class SessionSplitStateManager<
   AType extends string,
-  S
-> extends StateManager<AType, S> {
-  public get currentState(): S {
+  SSession extends State,
+  SWorld extends State
+> extends StateManager<AType, SSession & SWorld> {
+  public get currentState(): SSession & SWorld {
     const sessionState = this.sessionStateManager.currentState;
     const worldState = this.worldStateManager.currentState;
     return this.join(sessionState, worldState);
   }
 
   public constructor(
-    private readonly sessionStateManager: StateManager<AType, S>,
-    private readonly worldStateManager: StateManager<AType, S>,
+    private readonly sessionStateManager: StateManager<AType, SSession>,
+    private readonly worldStateManager: StateManager<AType, SWorld>,
   ) {
     super();
   }
 
-  public async apply(action: Action<AType>): Promise<S> {
+  public async apply(action: Action<AType>): Promise<SSession & SWorld> {
     const sessionState = await this.sessionStateManager.apply(action);
     const worldState = await this.worldStateManager.apply(action);
     return this.join(sessionState, worldState);
   }
 
-  public join(sessionState: S, worldState: S): S {
+  public join(sessionState: SSession, worldState: SWorld): SSession & SWorld {
     // By default (i.e., unless overridden), just go key by key
     //  and have "session" override "world".
     return {
