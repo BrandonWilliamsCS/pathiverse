@@ -9,7 +9,6 @@ export type State = { [key: string]: any };
 /**
  * State that explicitly includes a specification for the "current" Scene.
  */
-export interface SceneState<CType extends string>
-  extends State {
-  currentScene: Scene<CType>;
+export interface SceneState extends State {
+  currentScene: Scene;
 }

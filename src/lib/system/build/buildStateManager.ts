@@ -17,8 +17,7 @@ import { StorageFactory } from "../storage/Storage";
  * @param stateStorageFactory For generating storage instances based on a state path
  */
 export function buildStateManager<
-  CType extends string,
-  SSession extends SceneState<CType>,
+  SSession extends SceneState,
   SWorld extends State
 >(
   sessionName: string,

@@ -8,13 +8,11 @@ import { StorageFactory } from "../storage/Storage";
  * Creates a ContentResolver that reads string content values from storage.
  * @param contentStorageFactory The source of content
  */
-export function buildContentResolver<CType extends string>(
+export function buildContentResolver(
   contentStorageFactory: StorageFactory<string>,
-): ContentResovler<CType> {
-  const retreiver = new StoredContentRetriever<CType, string>(
-    contentStorageFactory,
-  );
-  const builder = new SimpleContentBuilder<CType>();
+): ContentResovler {
+  const retreiver = new StoredContentRetriever<string>(contentStorageFactory);
+  const builder = new SimpleContentBuilder();
   const resolver = new SimpleContentResolution(retreiver, builder);
   return resolver.resolver;
 }

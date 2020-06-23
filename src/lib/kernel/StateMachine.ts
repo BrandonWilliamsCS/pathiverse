@@ -9,18 +9,15 @@ import { StateManager } from "./StateManager";
  * The core mechanic for an action-based state machine.
  * Current state is presented to a renderer, which presents actions that ultimately update state and restart the cycle.
  */
-export class StateMachine<
-  CType extends string,
-  S extends SceneState<CType>
-> {
+export class StateMachine<S extends SceneState> {
   public get currentState(): S {
     return this.stateManager.currentState;
   }
 
   constructor(
     private readonly stateManager: StateManager<S>,
-    private readonly resolveContent: ContentResovler<CType>,
-    private readonly render: Renderer<CType, S>,
+    private readonly resolveContent: ContentResovler,
+    private readonly render: Renderer<S>,
   ) {}
 
   public async start() {

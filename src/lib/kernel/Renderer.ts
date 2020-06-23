@@ -5,8 +5,8 @@ import { ActionHandler } from "./ActionHandler";
 /**
  * Represents any mechanism that presents state-based content to a user and translates intreactions into an Action type.
  */
-export type Renderer<CType extends string, S extends SceneState<CType>> = (
+export type Renderer<S extends SceneState> = (
   currentState: S,
-  content: Content<CType>,
+  content: Content,
   actionHandler: ActionHandler,
 ) => Promise<void>;

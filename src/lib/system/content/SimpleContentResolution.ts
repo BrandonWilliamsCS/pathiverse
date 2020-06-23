@@ -6,21 +6,19 @@ import { ContentRetriever } from "./ContentRetriever";
 /**
  * Splits content resolution into two parts: retrieval and formatting.
  */
-export class SimpleContentResolution<CType extends string, R> {
-  public get resolver(): ContentResovler<CType> {
+export class SimpleContentResolution<R> {
+  public get resolver(): ContentResovler {
     return this.resolve;
   }
 
   public constructor(
-    private readonly retriever: ContentRetriever<CType, R>,
-    private readonly builder: ContentBuilder<CType, R>,
+    private readonly retriever: ContentRetriever<R>,
+    private readonly builder: ContentBuilder<R>,
   ) {
     this.resolve = this.resolve.bind(this);
   }
 
-  public async resolve(
-    indicator: ContentIndicator<CType>,
-  ): Promise<Content<CType>> {
+  public async resolve(indicator: ContentIndicator): Promise<Content> {
     const rawData = await this.retriever.retrieve(indicator);
     const content = this.builder.build(indicator.type, rawData);
     return content;
