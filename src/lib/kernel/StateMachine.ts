@@ -10,18 +10,17 @@ import { StateManager } from "./StateManager";
  * Current state is presented to a renderer, which presents actions that ultimately update state and restart the cycle.
  */
 export class StateMachine<
-  AType extends string,
   CType extends string,
-  S extends SceneState<AType, CType>
+  S extends SceneState<CType>
 > {
   public get currentState(): S {
     return this.stateManager.currentState;
   }
 
   constructor(
-    private readonly stateManager: StateManager<AType, S>,
+    private readonly stateManager: StateManager<S>,
     private readonly resolveContent: ContentResovler<CType>,
-    private readonly render: Renderer<AType, CType, S>,
+    private readonly render: Renderer<CType, S>,
   ) {}
 
   public async start() {
@@ -33,7 +32,7 @@ export class StateMachine<
       const nextContent = await this.resolveContent(
         nextState.currentScene.contentIndicator,
       );
-      let actionHandler: ActionHandler<AType>;
+      let actionHandler: ActionHandler;
       // Then split the state manager into:
       [
         // a generic handler to pass to the renderer,
@@ -46,10 +45,10 @@ export class StateMachine<
     }
   }
 
-  private splitStateManagerApplication(): [ActionHandler<AType>, Promise<S>] {
+  private splitStateManagerApplication(): [ActionHandler, Promise<S>] {
     // Finagle the resolver from the promise so we can use it as the action handler.
-    let actionHandler!: (action: Action<AType>) => void;
-    const statePromise = new Promise<Action<AType>>((resolve) => {
+    let actionHandler!: (action: Action) => void;
+    const statePromise = new Promise<Action>((resolve) => {
       actionHandler = resolve;
     }).then((action) => this.stateManager.apply(action));
     // The consumer can pass the handler along and listen for when it's called.

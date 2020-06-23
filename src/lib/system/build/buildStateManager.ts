@@ -1,5 +1,3 @@
-import { mapValues } from "lodash";
-
 import { State, SceneState } from "../../State";
 import { StateManager } from "../../kernel/StateManager";
 import {
@@ -19,17 +17,16 @@ import { StorageFactory } from "../storage/Storage";
  * @param stateStorageFactory For generating storage instances based on a state path
  */
 export function buildStateManager<
-  AType extends string,
   CType extends string,
-  SSession extends SceneState<AType, CType>,
+  SSession extends SceneState<CType>,
   SWorld extends State
 >(
   sessionName: string,
   worldName: string,
-  sessionSubStateManagerMap: SubStateManagerMap<AType, SSession>,
-  baseWorldStateManager: StateManager<AType, SWorld>,
+  sessionSubStateManagerMap: SubStateManagerMap<SSession>,
+  baseWorldStateManager: StateManager<SWorld>,
   stateStorageFactory: StorageFactory<State>,
-): StateManager<AType, SSession & SWorld> {
+): StateManager<SSession & SWorld> {
   const combinedSessionStateManager = new CompoundStateManager(
     sessionSubStateManagerMap,
   );
@@ -48,15 +45,15 @@ export function buildStateManager<
   return new SessionSplitStateManager(sessionStateManager, worldStateManager);
 }
 
-function buildStoredStateManager<AType extends string, S>(
+function buildStoredStateManager<S>(
   worldName: string,
   sessionName: string | undefined,
   stateStorageFactory: StorageFactory<S>,
-  baseStateManager: StateManager<AType, S>,
-): StateManager<AType, S> {
+  baseStateManager: StateManager<S>,
+): StateManager<S> {
   const storagePath = getStoragePath(worldName, sessionName);
   const storage = stateStorageFactory(storagePath);
-  const manager = new StoredStateManager(baseStateManager, storage);
+  const manager = new StoredStateManager<S>(baseStateManager, storage);
   return manager;
 }
 

@@ -18,20 +18,19 @@ import { buildStateManager } from "./buildStateManager";
  * @param renderer The renderer to use for the StateMachine
  */
 export function buildStateMachine<
-  AType extends string,
   CType extends string,
-  SSession extends SceneState<AType, CType>,
+  SSession extends SceneState<CType>,
   SWorld extends State
 >(
   sessionName: string,
   worldName: string,
-  sessionSubStateManagerMap: SubStateManagerMap<AType, SSession>,
-  baseWorldStateManager: StateManager<AType, SWorld>,
+  sessionSubStateManagerMap: SubStateManagerMap<SSession>,
+  baseWorldStateManager: StateManager<SWorld>,
   stateStorageFactory: StorageFactory<State>,
   contentStorageFactory: StorageFactory<string>,
-  renderer: Renderer<AType, CType, SSession & SWorld>,
+  renderer: Renderer<CType, SSession & SWorld>,
 ) {
-  const stateManager = buildStateManager<AType, CType, SSession, SWorld>(
+  const stateManager = buildStateManager<CType, SSession, SWorld>(
     sessionName,
     worldName,
     sessionSubStateManagerMap,

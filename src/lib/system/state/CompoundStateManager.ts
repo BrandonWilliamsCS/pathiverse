@@ -7,12 +7,9 @@ import { StateManager } from "../../kernel/StateManager";
 /**
  * Combines multiple constituent StateManagers by assigning each to one key in an object.
  */
-export class CompoundStateManager<
-  AType extends string,
-  S extends State
-> extends StateManager<AType, S> {
+export class CompoundStateManager<S extends State> extends StateManager<S> {
   public constructor(
-    private readonly substateManagerMap: SubStateManagerMap<AType, S>,
+    private readonly substateManagerMap: SubStateManagerMap<S>,
   ) {
     super();
   }
@@ -25,7 +22,7 @@ export class CompoundStateManager<
     }) as S;
   }
 
-  public async apply(action: Action<AType>): Promise<S> {
+  public async apply(action: Action): Promise<S> {
     // Apply the state for each StateManager...
     const substatePromises = mapValues(
       this.substateManagerMap,
@@ -43,6 +40,6 @@ export class CompoundStateManager<
 }
 
 // Take an object type with keys and wrap the value types in StatMaanger.
-export type SubStateManagerMap<AType extends string, S extends State> = {
-  [NonSceneKey in keyof S]: StateManager<AType, S[NonSceneKey]>;
+export type SubStateManagerMap<S extends State> = {
+  [NonSceneKey in keyof S]: StateManager<S[NonSceneKey]>;
 };
