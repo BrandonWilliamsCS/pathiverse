@@ -80,6 +80,28 @@ describe("StoredStateManager", () => {
         forAction: action,
       });
     });
+
+    it("translates LoadStoredStateAction to OverwriteAction with the stored state", async () => {
+      // Arrange
+      const underlyingStateManager = new TestStateManager();
+      const loadedState = { key: "value" };
+      const testStorage = new TestStorage(loadedState);
+      const stateManager = new StoredStateManager(
+        underlyingStateManager,
+        testStorage,
+      );
+      const action = { type: "storage.load" };
+
+      // Act
+      await stateManager.apply(action);
+
+      // Assert
+      const passedAlongAction = underlyingStateManager.currentState.forAction;
+      expect(passedAlongAction).toEqual({
+        type: "core.overwrite",
+        toState: loadedState,
+      });
+    });
   });
 });
 
@@ -96,6 +118,9 @@ class TestStateManager extends StateManager {
 }
 
 class TestStorage {
+  constructor(storedValue) {
+    this.storedValue = storedValue;
+  }
   readValue() {
     return Promise.resolve(this.storedValue);
   }
