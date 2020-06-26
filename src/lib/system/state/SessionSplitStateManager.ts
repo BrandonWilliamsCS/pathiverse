@@ -9,11 +9,10 @@ export class SessionSplitStateManager<
   SSession extends State,
   SWorld extends State
 > extends StateManager<SSession & SWorld> {
-  public get currentState(): SSession & SWorld {
-    const sessionState = this.sessionStateManager.currentState;
-    const worldState = this.worldStateManager.currentState;
-    return this.join(sessionState, worldState);
-  }
+  protected readonly initialState = this.join(
+    this.sessionStateManager.currentState,
+    this.worldStateManager.currentState,
+  );
 
   public constructor(
     private readonly sessionStateManager: StateManager<SSession>,
@@ -22,7 +21,7 @@ export class SessionSplitStateManager<
     super();
   }
 
-  public async apply(action: Action): Promise<SSession & SWorld> {
+  protected async generateNewState(action: Action): Promise<SSession & SWorld> {
     const sessionState = await this.sessionStateManager.apply(action);
     const worldState = await this.worldStateManager.apply(action);
     return this.join(sessionState, worldState);

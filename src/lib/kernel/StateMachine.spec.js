@@ -140,10 +140,9 @@ const testScene = {
 };
 
 class TestStateManager extends StateManager {
-  currentState = { currentScene: testScene, forAction: undefined };
-  apply(action) {
-    this.currentState = { currentScene: testScene, forAction: action };
-    return Promise.resolve(this.currentState);
+  initialState = { currentScene: testScene, forAction: undefined };
+  generateNewState(action) {
+    return Promise.resolve({ currentScene: testScene, forAction: action });
   }
 }
 

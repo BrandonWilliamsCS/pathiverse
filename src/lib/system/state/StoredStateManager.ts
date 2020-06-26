@@ -8,9 +8,7 @@ import { Storage } from "../storage/Storage";
  * Wraps another StateManager such that each new state gets written to storage.
  */
 export class StoredStateManager<S extends State> extends StateManager<S> {
-  public get currentState(): S {
-    return this.underlyingManager.currentState;
-  }
+  protected readonly initialState = this.underlyingManager.currentState;
 
   public constructor(
     private readonly underlyingManager: StateManager<S>,
@@ -19,7 +17,7 @@ export class StoredStateManager<S extends State> extends StateManager<S> {
     super();
   }
 
-  public async apply(action: Action): Promise<S> {
+  protected async generateNewState(action: Action): Promise<S> {
     if (isLoadStoredStateAction(action)) {
       // Loading is a special case, handled only at this level and translated to those below.
       const loadedState = await this.storage.readValue();

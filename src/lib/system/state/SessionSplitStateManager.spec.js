@@ -92,18 +92,17 @@ class TestStateManager extends StateManager {
   constructor(identifier) {
     super();
     this.identifier = identifier;
-    this.currentState = {
+    this.initialState = {
       [this.identifier]: this.identifier,
       both: this.identifier,
       forAction: undefined,
     };
   }
   apply(action) {
-    this.currentState = {
+    return Promise.resolve({
       [this.identifier]: this.identifier,
       both: this.identifier,
       forAction: action,
-    };
-    return Promise.resolve(this.currentState);
+    });
   }
 }
