@@ -6,7 +6,7 @@ import {
 } from "../state/CompoundStateManager";
 import { SessionSplitStateManager } from "../state/SessionSplitStateManager";
 import { StoredStateManager } from "../state/StoredStateManager";
-import { StorageFactory } from "../storage/Storage";
+import { StorageFactory } from "../storage/StorageFactory";
 
 /**
  * Creates a StateManager from a few, key resources using basic assumptions.

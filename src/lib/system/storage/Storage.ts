@@ -6,5 +6,3 @@ export interface Storage<T> {
   readValue(): Promise<T>;
   writeValue(value: T): Promise<void>;
 }
-
-export type StorageFactory<S> = (path: string) => Storage<S>;

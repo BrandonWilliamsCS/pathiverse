@@ -1,5 +1,5 @@
 import { ContentIndicator } from "../../Content";
-import { StorageFactory } from "../storage/Storage";
+import { StorageFactory } from "../storage/StorageFactory";
 
 /**
  * Retrieves raw content from Storage using the ContentIndicator name as a path.

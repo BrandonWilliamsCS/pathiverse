@@ -3,7 +3,7 @@ import { Renderer } from "../../kernel/Renderer";
 import { StateMachine } from "../../kernel/StateMachine";
 import { StateManager } from "../../kernel/StateManager";
 import { SubStateManagerMap } from "../state/CompoundStateManager";
-import { StorageFactory } from "../storage/Storage";
+import { StorageFactory } from "../storage/StorageFactory";
 import { buildContentResolver } from "./buildContentResolver";
 import { buildStateManager } from "./buildStateManager";
 
