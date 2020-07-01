@@ -7,7 +7,6 @@ import { StateManager } from "../../kernel/StateManager";
  */
 export class SceneStateManager extends StateManager<Scene> {
   public constructor(
-    protected readonly initialState: Scene,
     private readonly sceneLookup: SceneLookup,
   ) {
     super();

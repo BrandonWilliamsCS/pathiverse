@@ -3,7 +3,7 @@ import { CompoundStateManager } from "./CompoundStateManager";
 
 describe("CompoundStateManager", () => {
   describe("currentState", () => {
-    it("initially combines its constituent StateManagers' initial state", () => {
+    it("throws when not initialized", () => {
       // Arrange
       const subStateManagerMap = {
         component1: new TestStateManager("component1"),
@@ -12,22 +12,13 @@ describe("CompoundStateManager", () => {
       const stateManager = new CompoundStateManager(subStateManagerMap);
 
       // Act
-      const result = stateManager.currentState;
+      const act = () => stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        component1: {
-          identifier: "component1",
-          forAction: undefined,
-        },
-        component2: {
-          identifier: "component2",
-          forAction: undefined,
-        },
-      });
+      expect(act).toThrow();
     });
 
-    it("combines its constituent StateManagers' post-action state after applying an action", async () => {
+    it("reflects the state generated from the last applied action", async () => {
       // Arrange
       const subStateManagerMap = {
         component1: new TestStateManager("component1"),
@@ -37,20 +28,11 @@ describe("CompoundStateManager", () => {
       const action = { type: "ACTION" };
 
       // Act
-      await stateManager.apply(action);
+      const expected = await stateManager.apply(action);
       const result = stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        component1: {
-          identifier: "component1",
-          forAction: action,
-        },
-        component2: {
-          identifier: "component2",
-          forAction: action,
-        },
-      });
+      expect(result).toBe(expected);
     });
   });
 

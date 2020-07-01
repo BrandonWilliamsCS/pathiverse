@@ -3,7 +3,7 @@ import { buildStateManager } from "./buildStateManager";
 
 describe("buildStateManager", () => {
   describe("result.currentState", () => {
-    it("reflects the compound, joined initial state of the given SubStateManagerMaps", async () => {
+    it("throws when not initialized", () => {
       // Arrange
       const sessionName = "SessionName";
       const worldName = "WorldName";
@@ -26,24 +26,13 @@ describe("buildStateManager", () => {
         worldStateManager,
         storageFactory,
       );
-      const result = stateManager.currentState;
+      const act = () => stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        part1: {
-          "session.part1": "session.part1",
-          forAction: undefined,
-        },
-        part2: {
-          "session.part2": "session.part2",
-          forAction: undefined,
-        },
-        world: "world",
-        forAction: undefined,
-      });
+      expect(act).toThrow();
     });
 
-    it("reflects the compound, joined post-action state of the given SubStateManagerMaps", async () => {
+    it("reflects the state generated from the last applied action", async () => {
       // Arrange
       const sessionName = "SessionName";
       const worldName = "WorldName";
@@ -57,7 +46,7 @@ describe("buildStateManager", () => {
         writeValue: jest.fn().mockResolvedValue(),
       };
       const storageFactory = () => storage;
-      const action = {};
+      const action = { type: "ACTION" };
 
       // Act
       const stateManager = buildStateManager(
@@ -67,22 +56,11 @@ describe("buildStateManager", () => {
         worldStateManager,
         storageFactory,
       );
-      await stateManager.apply(action);
+      const expected = await stateManager.apply(action);
       const result = stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        part1: {
-          "session.part1": "session.part1",
-          forAction: action,
-        },
-        part2: {
-          "session.part2": "session.part2",
-          forAction: action,
-        },
-        world: "world",
-        forAction: action,
-      });
+      expect(result).toBe(expected);
     });
   });
 

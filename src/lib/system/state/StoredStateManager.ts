@@ -8,8 +8,6 @@ import { Storage } from "../storage/Storage";
  * Wraps another StateManager such that each new state gets written to storage.
  */
 export class StoredStateManager<S extends State> extends StateManager<S> {
-  protected readonly initialState = this.underlyingManager.currentState;
-
   public constructor(
     private readonly underlyingManager: StateManager<S>,
     private readonly storage: Storage<S>,
@@ -42,7 +40,7 @@ export interface LoadStoredStateAction extends Action {
   type: "storage.load";
 }
 export function isLoadStoredStateAction(
-  action: any,
+  action: Action,
 ): action is LoadStoredStateAction {
   return action && action.type === "storage.load";
 }

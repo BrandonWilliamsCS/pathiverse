@@ -3,7 +3,7 @@ import { SessionSplitStateManager } from "./SessionSplitStateManager";
 
 describe("SessionSplitStateManager", () => {
   describe("currentState", () => {
-    it("reflects its constituent StateManagers' initial states, joined", async () => {
+    it("throws when not initialized", () => {
       // Arrange
       const sessionStateManager = new TestStateManager("session");
       const worldStateManager = new TestStateManager("world");
@@ -13,17 +13,13 @@ describe("SessionSplitStateManager", () => {
       );
 
       // Act
-      const result = stateManager.currentState;
+      const act = () => stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        session: "session",
-        world: "world",
-        forAction: undefined,
-      });
+      expect(act).toThrow();
     });
 
-    it("reflects its constituent StateManagers' post-action states, joined", async () => {
+    it("reflects the state generated from the last applied action", async () => {
       // Arrange
       const sessionStateManager = new TestStateManager("session");
       const worldStateManager = new TestStateManager("world");
@@ -34,33 +30,11 @@ describe("SessionSplitStateManager", () => {
       const action = { type: "ACTION" };
 
       // Act
-      await stateManager.apply(action);
+      const expected = await stateManager.apply(action);
       const result = stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        session: "session",
-        world: "world",
-        forAction: action,
-      });
-    });
-
-    it("prefers session state over world state when joining", async () => {
-      // Arrange
-      const sessionStateManager = new TestStateManager("session");
-      const worldStateManager = new TestStateManager("world");
-      const stateManager = new SessionSplitStateManager(
-        sessionStateManager,
-        worldStateManager,
-      );
-
-      // Act
-      const result = stateManager.currentState;
-
-      // Assert
-      expect(result).toMatchObject({
-        both: "session",
-      });
+      expect(result).toBe(expected);
     });
   });
 

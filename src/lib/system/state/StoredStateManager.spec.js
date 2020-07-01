@@ -3,7 +3,7 @@ import { StoredStateManager } from "./StoredStateManager";
 
 describe("StoredStateManager", () => {
   describe("currentState", () => {
-    it("reflects its underlying StateManager's initial state", async () => {
+    it("throws when not initialized", () => {
       // Arrange
       const underlyingStateManager = new TestStateManager();
       const testStorage = new TestStorage();
@@ -13,15 +13,13 @@ describe("StoredStateManager", () => {
       );
 
       // Act
-      const result = stateManager.currentState;
+      const act = () => stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        forAction: undefined,
-      });
+      expect(act).toThrow();
     });
 
-    it("reflects its underlying StateManager's post-action state", async () => {
+    it("reflects the state generated from the last applied action", async () => {
       // Arrange
       const underlyingStateManager = new TestStateManager();
       const testStorage = new TestStorage();
@@ -32,13 +30,11 @@ describe("StoredStateManager", () => {
       const action = { type: "ACTION" };
 
       // Act
-      await stateManager.apply(action);
+      const expected = await stateManager.apply(action);
       const result = stateManager.currentState;
 
       // Assert
-      expect(result).toMatchObject({
-        forAction: action,
-      });
+      expect(result).toBe(expected);
     });
   });
 

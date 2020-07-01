@@ -9,11 +9,6 @@ export class SessionSplitStateManager<
   SSession extends State,
   SWorld extends State
 > extends StateManager<SSession & SWorld> {
-  protected readonly initialState = this.join(
-    this.sessionStateManager.currentState,
-    this.worldStateManager.currentState,
-  );
-
   public constructor(
     private readonly sessionStateManager: StateManager<SSession>,
     private readonly worldStateManager: StateManager<SWorld>,

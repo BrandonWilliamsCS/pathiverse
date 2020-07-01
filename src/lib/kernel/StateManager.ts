@@ -5,11 +5,13 @@ import { State } from "../State";
  * A steward of some piece of data as well as how incoming actions affect that data.
  */
 export abstract class StateManager<S extends State> {
-  protected abstract get initialState(): S;
   private latestState: S | undefined;
 
   public get currentState(): S {
-    return this.latestState ?? this.initialState;
+    if (!this.latestState) {
+      throw new Error("State has not yet been initialized.");
+    }
+    return this.latestState;
   }
 
   protected abstract generateNewState(action: Action): Promise<S>;
