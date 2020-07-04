@@ -1,18 +1,27 @@
 import { Action } from "../../Action";
 import { Scene } from "../../Scene";
-import { StateManager } from "../../kernel/StateManager";
+import { InitializeAction, isInitializeAction } from "../CoreAction";
+import { InitializableStateManager } from "./InitializableStateManager";
 
 /**
  * Manages the current Scene to be presented to the user.
  */
-export class SceneStateManager extends StateManager<Scene> {
-  public constructor(
-    private readonly sceneLookup: SceneLookup,
-  ) {
+export class SceneStateManager extends InitializableStateManager<Scene> {
+  public constructor(private readonly sceneLookup: SceneLookup) {
     super();
   }
 
-  protected async generateNewState(action: Action): Promise<Scene> {
+  protected async generateInititalState(
+    action: InitializeAction,
+  ): Promise<Scene> {
+    if (!isInitializeSceneAction(action)) {
+      throw new Error("Cannot initialize scene without `initialSceneName`.");
+    }
+    const nextScene = await this.sceneLookup(action.initialSceneName);
+    return nextScene;
+  }
+
+  protected async generateNextState(action: Action): Promise<Scene> {
     if (!isAdvanceSceneAction(action)) {
       return this.currentState;
     }
@@ -25,12 +34,21 @@ export type SceneLookup = (name: string) => Promise<Scene>;
 
 export type SceneStateManagerAction = AdvanceSceneAction;
 
+export interface InitializeSceneAction extends InitializeAction {
+  initialSceneName: string;
+}
+export function isInitializeSceneAction(
+  action: InitializeAction,
+): action is InitializeSceneAction {
+  return isInitializeAction(action) && !!(action as any).initialSceneName;
+}
+
 export interface AdvanceSceneAction extends Action {
   type: "scene.advance";
   nextSceneName: string;
 }
 export function isAdvanceSceneAction(
-  action: any,
+  action: Action,
 ): action is AdvanceSceneAction {
   return action && action.type === "scene.advance";
 }

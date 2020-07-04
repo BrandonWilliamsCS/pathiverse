@@ -16,18 +16,21 @@ describe("SceneStateManager", () => {
 
     it("reflects the state generated from the last applied action", async () => {
       // Arrange
-      const nextScene = {
+      const initialScene = {
         world: "WORLDNAME",
         story: "STORYNAME",
-        name: "NEXT_SCENE",
+        name: "INITIAL_SCENE",
         summary: undefined,
         branchSummary: undefined,
         contentIndicator: { type: "CONTENT", name: "CONTENT" },
         possibleActions: [],
       };
-      const sceneLookup = buildSceneLookup([nextScene]);
+      const sceneLookup = buildSceneLookup([initialScene]);
       const stateManager = new SceneStateManager(sceneLookup);
-      const action = { type: "scene.advance", nextSceneName: "NEXT_SCENE" };
+      const action = {
+        type: "core.initialize",
+        initialSceneName: "INITIAL_SCENE",
+      };
 
       // Act
       const expected = await stateManager.apply(action);
@@ -39,22 +42,8 @@ describe("SceneStateManager", () => {
   });
 
   describe("apply", () => {
-    it("throws when given non-scene actions and uninitialized", async () => {
+    it("throws when given non-init actions and uninitialized", async () => {
       // Arrange
-      const sceneLookup = buildSceneLookup([]);
-      const stateManager = new SceneStateManager(sceneLookup);
-      const action = { type: "misc" };
-
-      // Act
-      const resultPromise = stateManager.apply(action);
-
-      // Assert
-      expect(resultPromise).rejects.toThrow();
-    });
-
-    it("Switches scenes when given 'scene.advance'", async () => {
-      // Arrange
-      const action = { type: "scene.advance", nextSceneName: "NEXT_SCENE" };
       const nextScene = {
         world: "WORLDNAME",
         story: "STORYNAME",
@@ -66,8 +55,45 @@ describe("SceneStateManager", () => {
       };
       const sceneLookup = buildSceneLookup([nextScene]);
       const stateManager = new SceneStateManager(sceneLookup);
+      const action = { type: "scene.advance", nextSceneName: "NEXT_SCENE" };
 
       // Act
+      const resultPromise = stateManager.apply(action);
+
+      // Assert
+      expect(resultPromise).rejects.toThrow();
+    });
+
+    it("Switches scenes when given 'scene.advance' after initialization", async () => {
+      // Arrange
+      const initialScene = {
+        world: "WORLDNAME",
+        story: "STORYNAME",
+        name: "INITIAL_SCENE",
+        summary: undefined,
+        branchSummary: undefined,
+        contentIndicator: { type: "CONTENT", name: "CONTENT" },
+        possibleActions: [],
+      };
+      const nextScene = {
+        world: "WORLDNAME",
+        story: "STORYNAME",
+        name: "NEXT_SCENE",
+        summary: undefined,
+        branchSummary: undefined,
+        contentIndicator: { type: "CONTENT", name: "CONTENT" },
+        possibleActions: [],
+      };
+      const sceneLookup = buildSceneLookup([initialScene, nextScene]);
+      const stateManager = new SceneStateManager(sceneLookup);
+      const initializationAction = {
+        type: "core.initialize",
+        initialSceneName: "INITIAL_SCENE",
+      };
+      const action = { type: "scene.advance", nextSceneName: "NEXT_SCENE" };
+
+      // Act
+      await stateManager.apply(initializationAction);
       const result = await stateManager.apply(action);
 
       // Assert
