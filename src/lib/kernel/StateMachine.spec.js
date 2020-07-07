@@ -1,13 +1,13 @@
+import { StateGenerator } from "./StateGenerator";
 import { StateMachine } from "./StateMachine";
-import { StateManager } from "./StateManager";
 
 describe("StateMachine", () => {
-  it("renders nothing until the initialization action is resolved", async () => {
+  it("renders nothing until the first action is resolved", async () => {
     // Arrange
     const renderer = jest.fn();
-    const stateManager = new TestStateManager();
+    const stateGenerator = new TestStateGenerator();
     const stateMachine = new StateMachine(
-      stateManager,
+      stateGenerator,
       testContentResolver,
       renderer,
     );
@@ -26,9 +26,9 @@ describe("StateMachine", () => {
     // Arrange
     const initialAction = { type: "ACTION" };
     const renderer = jest.fn();
-    const stateManager = new TestStateManager();
+    const stateGenerator = new TestStateGenerator();
     const stateMachine = new StateMachine(
-      stateManager,
+      stateGenerator,
       testContentResolver,
       renderer,
     );
@@ -42,7 +42,11 @@ describe("StateMachine", () => {
 
     // Assert
     expect(renderer).toHaveBeenCalledWith(
-      { currentScene: testScene, forAction: initialAction },
+      {
+        currentScene: testScene,
+        forAction: initialAction,
+        prevState: undefined,
+      },
       {
         type: "CONTENT_TYPE",
         indicator: { type: "CONTENT_TYPE" },
@@ -56,9 +60,9 @@ describe("StateMachine", () => {
     const initialAction = { type: "ACTION" };
     const secondAction = { type: "ACTION2" };
     const renderer = jest.fn();
-    const stateManager = new TestStateManager();
+    const stateGenerator = new TestStateGenerator();
     const stateMachine = new StateMachine(
-      stateManager,
+      stateGenerator,
       testContentResolver,
       renderer,
     );
@@ -76,8 +80,16 @@ describe("StateMachine", () => {
     });
 
     // Assert
-    expect(renderer).toHaveBeenCalledWith(
-      { currentScene: testScene, forAction: secondAction },
+    expect(renderer).toHaveBeenLastCalledWith(
+      {
+        currentScene: testScene,
+        forAction: secondAction,
+        prevState: {
+          currentScene: testScene,
+          forAction: initialAction,
+          prevState: undefined,
+        },
+      },
       {
         type: "CONTENT_TYPE",
         indicator: { type: "CONTENT_TYPE" },
@@ -97,10 +109,13 @@ const testScene = {
   possibleActions: [{ type: "ACTION_TYPE" }],
 };
 
-class TestStateManager extends StateManager {
-  initialState = { currentScene: testScene, forAction: undefined };
-  generateNewState(action) {
-    return Promise.resolve({ currentScene: testScene, forAction: action });
+class TestStateGenerator extends StateGenerator {
+  apply(action, prevState) {
+    return Promise.resolve({
+      currentScene: testScene,
+      forAction: action,
+      prevState,
+    });
   }
 }
 
