@@ -34,11 +34,6 @@ class TestStateGenerator extends StateGenerator {
   constructor(identifier) {
     super();
     this.identifier = identifier;
-    this.initialState = {
-      identifier: this.identifier,
-      forAction: undefined,
-      prevState: undefined,
-    };
   }
   apply(action, prevState) {
     return Promise.resolve({
