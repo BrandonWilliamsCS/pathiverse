@@ -2,6 +2,7 @@ import { Scene } from "../../Scene";
 
 export interface Story {
   name: string;
+  startSceneName: string;
   availableScenes: Scene[];
 }
 

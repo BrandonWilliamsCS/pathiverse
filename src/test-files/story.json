@@ -1,5 +1,6 @@
 {
   "name": "Test Story 1",
+  "startSceneName": "SCENE1",
   "availableScenes": [
     {
       "name": "SCENE1",
@@ -9,7 +10,12 @@
       },
       "summary": "",
       "branchSummary": "",
-      "possibleActions": []
+      "possibleActions": [
+        {
+          "type": "scene.advance",
+          "nextSceneName": "SCENE2"
+        }
+      ]
     },
     {
       "name": "SCENE2",
@@ -19,7 +25,12 @@
       },
       "summary": "",
       "branchSummary": "",
-      "possibleActions": []
+      "possibleActions": [
+        {
+          "type": "scene.advance",
+          "nextSceneName": "SCENE1"
+        }
+      ]
     }
   ]
 }

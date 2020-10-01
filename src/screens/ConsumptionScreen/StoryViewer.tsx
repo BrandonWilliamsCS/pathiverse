@@ -16,16 +16,30 @@ export const StoryViewer: React.FC<StoryViewerProps> = ({ story }) => {
   const loadScene = () => {
     const action: AdvanceSceneAction = {
       type: "scene.advance",
-      nextSceneName: "SCENE1",
+      nextSceneName: story.startSceneName,
     };
     actionHandler(action);
   };
   return (
     <>
       <pre>{JSON.stringify(data, null, 2)}</pre>
-      <button type="button" onClick={loadScene}>
-        Load Scene
-      </button>
+      {data ? (
+        data[0].currentScene.possibleActions.map((action, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => {
+              actionHandler(action);
+            }}
+          >
+            Action {i}
+          </button>
+        ))
+      ) : (
+        <button type="button" onClick={loadScene}>
+          Load Scene
+        </button>
+      )}
     </>
   );
 };
