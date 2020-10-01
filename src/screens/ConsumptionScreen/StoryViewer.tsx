@@ -1,12 +1,13 @@
+import React from "react";
 import { useStateMachine } from "lib/platform/react/useStateMachine";
 import { AdvanceSceneAction } from "lib/system/state/SceneStateGenerator";
-import React from "react";
+import { Story } from "lib/system/world/Story";
 
 import { useContentResolver } from "./useContentResolver";
 import { useStateGenerator } from "./useStateGenerator";
 
-export const StoryViewer: React.FC = () => {
-  const stateGenerator = useStateGenerator();
+export const StoryViewer: React.FC<StoryViewerProps> = ({ story }) => {
+  const stateGenerator = useStateGenerator(story);
   const contentResolver = useContentResolver();
   const [data, actionHandler] = useStateMachine(
     stateGenerator,
@@ -15,7 +16,7 @@ export const StoryViewer: React.FC = () => {
   const loadScene = () => {
     const action: AdvanceSceneAction = {
       type: "scene.advance",
-      nextSceneName: "SCENE",
+      nextSceneName: "SCENE1",
     };
     actionHandler(action);
   };
@@ -28,3 +29,7 @@ export const StoryViewer: React.FC = () => {
     </>
   );
 };
+
+export interface StoryViewerProps {
+  story: Story;
+}

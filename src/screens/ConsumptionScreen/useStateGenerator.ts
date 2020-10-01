@@ -1,31 +1,18 @@
 import React from "react";
 
 import { StateGenerator } from "lib/kernel/StateGenerator";
-import { Scene } from "lib/Scene";
 import { SceneState } from "lib/State";
 import { SceneStateGenerator } from "lib/system/state/SceneStateGenerator";
 import { CompoundStateGenerator } from "lib/system/state/CompoundStateGenerator";
+import { Story, sceneSourceFromStory } from "lib/system/world/Story";
 
-export function useStateGenerator(): StateGenerator<SceneState> {
-  const [stateGenerator] = React.useState(createStateGenerator);
+export function useStateGenerator(story: Story): StateGenerator<SceneState> {
+  const [stateGenerator] = React.useState(() => createStateGenerator(story));
   return stateGenerator;
 }
 
-function createStateGenerator(): StateGenerator<SceneState> {
-  // TODO: don't hardcode sceneSource - based on story instead
-  const sceneSource = () =>
-    Promise.resolve<Scene>({
-      world: "WORLD",
-      story: "STORY",
-      name: "SCENE",
-      summary: undefined,
-      branchSummary: undefined,
-      contentIndicator: {
-        type: "markdown",
-        name: "content.md",
-      },
-      possibleActions: [],
-    });
+function createStateGenerator(story: Story): StateGenerator<SceneState> {
+  const sceneSource = sceneSourceFromStory(story);
   const sceneStateGenerator = new SceneStateGenerator(sceneSource);
   const stateGenerator = new CompoundStateGenerator<SceneState>({
     currentScene: sceneStateGenerator,

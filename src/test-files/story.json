@@ -1,0 +1,25 @@
+{
+  "name": "Test Story 1",
+  "availableScenes": [
+    {
+      "name": "SCENE1",
+      "contentIndicator": {
+        "type": "markdown",
+        "name": "content.md"
+      },
+      "summary": "",
+      "branchSummary": "",
+      "possibleActions": []
+    },
+    {
+      "name": "SCENE2",
+      "contentIndicator": {
+        "type": "markdown",
+        "name": "content.md"
+      },
+      "summary": "",
+      "branchSummary": "",
+      "possibleActions": []
+    }
+  ]
+}
