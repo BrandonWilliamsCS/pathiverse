@@ -5,8 +5,9 @@
     {
       "name": "SCENE1",
       "contentIndicator": {
-        "type": "markdown",
-        "name": "content.md"
+        "type": "markdown-path",
+        "name": "content1.md",
+        "markdown": "# Scene 1"
       },
       "summary": "",
       "branchSummary": "",
@@ -20,8 +21,9 @@
     {
       "name": "SCENE2",
       "contentIndicator": {
-        "type": "markdown",
-        "name": "content.md"
+        "type": "markdown-path",
+        "name": "content2.md",
+        "markdown": "# Scene 2"
       },
       "summary": "",
       "branchSummary": "",

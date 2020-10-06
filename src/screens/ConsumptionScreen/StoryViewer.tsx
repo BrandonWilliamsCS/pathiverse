@@ -1,5 +1,7 @@
 import React from "react";
 import { useStateMachine } from "lib/platform/react/useStateMachine";
+import { isMarkdownPathContent } from "lib/plugin/markdown-path/MarkdownPathContent";
+import { MarkdownPathContentComponent } from "lib/plugin/markdown-path/MarkdownPathContentComponent";
 import { AdvanceSceneAction } from "lib/system/state/SceneStateGenerator";
 import { Story } from "lib/system/world/Story";
 
@@ -20,27 +22,22 @@ export const StoryViewer: React.FC<StoryViewerProps> = ({ story }) => {
     };
     actionHandler(action);
   };
+  if (!data) {
+    return (
+      <button type="button" onClick={loadScene}>
+        Load Scene
+      </button>
+    );
+  }
+  const [, content] = data;
+  if (!isMarkdownPathContent(content)) {
+    return <>Unable to render content with type {content.type}</>;
+  }
   return (
-    <>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      {data ? (
-        data[0].currentScene.possibleActions.map((action, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => {
-              actionHandler(action);
-            }}
-          >
-            Action {i}
-          </button>
-        ))
-      ) : (
-        <button type="button" onClick={loadScene}>
-          Load Scene
-        </button>
-      )}
-    </>
+    <MarkdownPathContentComponent
+      content={content}
+      actionHandler={actionHandler}
+    />
   );
 };
 
