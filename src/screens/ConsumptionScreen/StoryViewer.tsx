@@ -29,13 +29,14 @@ export const StoryViewer: React.FC<StoryViewerProps> = ({ story }) => {
       </button>
     );
   }
-  const [, content] = data;
+  const [state, content] = data;
   if (!isMarkdownPathContent(content)) {
     return <>Unable to render content with type {content.type}</>;
   }
   return (
     <MarkdownPathContentComponent
       content={content}
+      state={state}
       actionHandler={actionHandler}
     />
   );

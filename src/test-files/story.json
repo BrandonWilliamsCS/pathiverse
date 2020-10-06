@@ -14,7 +14,8 @@
       "possibleActions": [
         {
           "type": "scene.advance",
-          "nextSceneName": "SCENE2"
+          "nextSceneName": "SCENE2",
+          "label": "Go to Scene 2"
         }
       ]
     },
@@ -30,7 +31,8 @@
       "possibleActions": [
         {
           "type": "scene.advance",
-          "nextSceneName": "SCENE1"
+          "nextSceneName": "SCENE1",
+          "label": "Go to Scene 1"
         }
       ]
     }
