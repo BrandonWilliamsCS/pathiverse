@@ -1,4 +1,4 @@
-import { Content } from "../../Content";
+import { Content } from "./Content";
 
 /**
  * Performs the second part of Content resolution: converting raw data to a useful format.

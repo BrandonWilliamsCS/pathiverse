@@ -1,5 +1,5 @@
-import { ContentResovler } from "../../kernel/ContentResolver";
-import { Content, ContentIndicator } from "../../Content";
+import { ContentResovler } from "./ContentResolver";
+import { Content, ContentIndicator } from "./Content";
 import { ContentBuilder } from "./ContentBuilder";
 import { ContentRetriever } from "./ContentRetriever";
 

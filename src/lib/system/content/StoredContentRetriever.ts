@@ -1,4 +1,4 @@
-import { ContentIndicator } from "../../Content";
+import { ContentIndicator } from "./Content";
 import { StorageFactory } from "../storage/StorageFactory";
 
 /**

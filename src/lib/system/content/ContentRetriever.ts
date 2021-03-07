@@ -1,4 +1,4 @@
-import { ContentIndicator } from "../../Content";
+import { ContentIndicator } from "./Content";
 
 /**
  * Performs the first part of Content resolution: accessing raw data from a source.

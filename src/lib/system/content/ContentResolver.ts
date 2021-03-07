@@ -1,4 +1,4 @@
-import { Content, ContentIndicator } from "../Content";
+import { Content, ContentIndicator } from "./Content";
 
 /**
  * A low-level abstraction for transforming a content "indicator" into actual content.
