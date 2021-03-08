@@ -15,7 +15,7 @@ export function useVanillaPathiverseStoryKernel<
   S extends Scene,
   A extends Action
 >(story: Story<S>): [StoryState<S, undefined>, ActionHandler<A>] {
-  return encapsulateStoryReducer(story, vanillaUserStateReducer, undefined);``
+  return encapsulateStoryReducer(story, vanillaUserStateReducer, undefined);
 }
 
 const vanillaUserStateReducer = () => Promise.resolve(undefined);
