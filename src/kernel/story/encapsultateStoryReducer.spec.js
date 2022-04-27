@@ -4,13 +4,12 @@ describe("encapsulateStoryReducer", () => {
   it("Returns the initial scene and user state in the first state capsule", async () => {
     // Arrange
     const initialScene = { name: "scene1" };
-    const story = { initialScene };
     const userStateReducer = (prevState, action) => prevState + 1;
     const initialUserState = 0;
 
     // Act
     const [firstState] = encapsulateStoryReducer(
-      story,
+      initialScene,
       userStateReducer,
       initialUserState,
     );
@@ -23,13 +22,12 @@ describe("encapsulateStoryReducer", () => {
   it("Adjusts current scene when AdvanceSceneAction is applied", async () => {
     // Arrange
     const initialScene = { name: "scene1" };
-    const story = { initialScene };
     const userStateReducer = (prevState, action) => prevState + 1;
     const initialUserState = 0;
 
     // Act
     const [, firstApplier] = encapsulateStoryReducer(
-      story,
+      initialScene,
       userStateReducer,
       initialUserState,
     );
@@ -47,13 +45,12 @@ describe("encapsulateStoryReducer", () => {
   it("Doesn't adjust current scene when non-AdvanceSceneAction is applied", async () => {
     // Arrange
     const initialScene = { name: "scene1" };
-    const story = { initialScene };
     const userStateReducer = (prevState, action) => prevState + 1;
     const initialUserState = 0;
 
     // Act
     const [, firstApplier] = encapsulateStoryReducer(
-      story,
+      initialScene,
       userStateReducer,
       initialUserState,
     );
@@ -69,13 +66,12 @@ describe("encapsulateStoryReducer", () => {
   it("Applies all actions to user state", async () => {
     // Arrange
     const initialScene = { name: "scene1" };
-    const story = { initialScene };
     const userStateReducer = (prevState, action) => prevState + 1;
     const initialUserState = 0;
 
     // Act
     const [, firstApplier] = encapsulateStoryReducer(
-      story,
+      initialScene,
       userStateReducer,
       initialUserState,
     );

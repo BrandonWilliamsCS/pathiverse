@@ -1,19 +1,21 @@
 import React from "react";
 
-import { Story } from "kernel/story/Story";
 import { useVanillaPathiverseStoryKernel } from "platform/react/useVanillaPathiverseStoryKernel";
 import { ContentScene } from "system/content/ContentScene";
 import { ContentResovler } from "system/content/ContentResolver";
 import { usePromisedValue } from "util/usePromisedValue";
 
+export interface StoryViewerProps {
+  contentResolver: ContentResovler;
+  initialScene: ContentScene;
+}
+
 export const StoryViewer: React.FC<StoryViewerProps> = ({
   contentResolver,
-  story,
+  initialScene,
 }) => {
-  const [
-    { scene: currentScene },
-    actionHandler,
-  ] = useVanillaPathiverseStoryKernel(story);
+  const [{ scene: currentScene }, actionHandler] =
+    useVanillaPathiverseStoryKernel(initialScene);
   const contentPromise = React.useMemo(
     () => contentResolver(currentScene.contentIndicator),
     [currentScene, contentResolver],
@@ -25,8 +27,3 @@ export const StoryViewer: React.FC<StoryViewerProps> = ({
     <span>Loading content...</span>
   );
 };
-
-export interface StoryViewerProps {
-  contentResolver: ContentResovler;
-  story: Story<ContentScene>;
-}
