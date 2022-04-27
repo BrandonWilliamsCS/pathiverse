@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Story } from "lib/kernel/story/Story";
-import { buildContentResolver } from "lib/system/content/buildContentResolver";
-import { ContentScene } from "lib/system/content/ContentScene";
-import { StorageFactory } from "lib/system/storage/StorageFactory";
+import { Story } from "kernel/story/Story";
+import { buildContentResolver } from "plugin/buildContentResolver";
+import { ContentScene } from "system/content/ContentScene";
+import { StorageFactory } from "system/storage/StorageFactory";
 import { useFunctionInitRef } from "util/useFunctionInitRef";
 import { StoryViewer } from "./StoryViewer";
 

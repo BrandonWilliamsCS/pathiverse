@@ -1,7 +1,7 @@
-import { ContentResovler } from "./ContentResolver";
-import { Content, ContentIndicator } from "./Content";
-import { ContentBuilder } from "./ContentBuilder";
-import { ContentRetriever } from "./ContentRetriever";
+import { Content, ContentIndicator } from "system/content/Content";
+import { ContentBuilder } from "system/content/ContentBuilder";
+import { ContentResovler } from "system/content/ContentResolver";
+import { ContentRetriever } from "system/content/ContentRetriever";
 
 /**
  * Splits content resolution into two parts: retrieval and formatting.

@@ -1,5 +1,5 @@
-import { Action } from "lib/Action";
-import { Scene } from "lib/Scene";
+import { Action } from "kernel/Action";
+import { Scene } from "../Scene";
 
 export interface AdvanceSceneAction<S extends Scene> extends Action {
   type: "pathiverse.story.advanceScene";

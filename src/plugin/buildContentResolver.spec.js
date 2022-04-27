@@ -1,6 +1,6 @@
 import { buildContentResolver } from "./buildContentResolver";
 
-describe("buildStateManager", () => {
+describe("buildContentResolver", () => {
   describe("result", () => {
     it("requests content from storage based on the Scene name", async () => {
       // Arrange

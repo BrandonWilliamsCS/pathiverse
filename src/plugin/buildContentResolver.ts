@@ -1,5 +1,5 @@
-import { StorageFactory } from "../storage/StorageFactory";
-import { ContentResovler } from "./ContentResolver";
+import { ContentResovler } from "system/content/ContentResolver";
+import { StorageFactory } from "system/storage/StorageFactory";
 import { SimpleContentBuilder } from "./SimpleContentBuilder";
 import { SimpleContentResolution } from "./SimpleContentResolution";
 import { StoredContentRetriever } from "./StoredContentRetriever";

@@ -1,5 +1,5 @@
-import { Content } from "./Content";
-import { ContentBuilder } from "./ContentBuilder";
+import { Content } from "system/content/Content";
+import { ContentBuilder } from "system/content/ContentBuilder";
 
 /**
  * "Builds" content by treating the raw data as a simple value.

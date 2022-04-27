@@ -1,4 +1,4 @@
-import { Scene } from "lib/Scene";
+import { Scene } from "../Scene";
 
 /** 
  * Describes a Pathiverse story structure.

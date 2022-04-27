@@ -1,9 +1,9 @@
-import { Action } from "lib/Action";
-import { Scene } from "lib/Scene";
-import { encapsulateStoryReducer } from "lib/kernel/story/encapsulateStoryReducer";
-import { Story } from "lib/kernel/story/Story";
-import { StoryState } from "lib/kernel/story/StoryState";
-import { ActionHandler } from "lib/kernel/ActionHandler";
+import { Action } from "kernel/Action";
+import { Scene } from "kernel/Scene";
+import { ActionApplier } from "kernel/state/ActionApplier";
+import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
+import { Story } from "kernel/story/Story";
+import { StoryState } from "kernel/story/StoryState";
 
 /**
  * Encapsulate a Pathiverse story reducer into React state with updates based on actions and ignoring user state.
@@ -13,8 +13,10 @@ import { ActionHandler } from "lib/kernel/ActionHandler";
  */
 export function useVanillaPathiverseStoryKernel<
   S extends Scene,
-  A extends Action
->(story: Story<S>): [StoryState<S, undefined>, ActionHandler<A>] {
+  A extends Action,
+>(
+  story: Story<S>,
+): [StoryState<S, undefined>, ActionApplier<StoryState<S, undefined>, A>] {
   return encapsulateStoryReducer(story, vanillaUserStateReducer, undefined);
 }
 

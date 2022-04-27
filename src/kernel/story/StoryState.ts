@@ -1,4 +1,4 @@
-import { Scene } from "lib/Scene";
+import { Scene } from "../Scene";
 
 /** 
  * Describes a Pathiverse state that's built around scene-based story structures.

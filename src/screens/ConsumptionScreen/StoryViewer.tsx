@@ -1,9 +1,9 @@
 import React from "react";
 
-import { Story } from "lib/kernel/story/Story";
-import { useVanillaPathiverseStoryKernel } from "lib/platform/react/useVanillaPathiverseStoryKernel";
-import { ContentScene } from "lib/system/content/ContentScene";
-import { ContentResovler } from "lib/system/content/ContentResolver";
+import { Story } from "kernel/story/Story";
+import { useVanillaPathiverseStoryKernel } from "platform/react/useVanillaPathiverseStoryKernel";
+import { ContentScene } from "system/content/ContentScene";
+import { ContentResovler } from "system/content/ContentResolver";
 import { usePromisedValue } from "util/usePromisedValue";
 
 export const StoryViewer: React.FC<StoryViewerProps> = ({
