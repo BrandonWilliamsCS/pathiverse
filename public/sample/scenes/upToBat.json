@@ -1,0 +1,33 @@
+{
+  "type": "pathiverse.scene.contentWithResponse",
+  "name": "Up To Bat",
+  "content": {
+    "type": "pathiverse.content.text/plain",
+    "value": "You step up to the plate, swing at the pitch, and..."
+  },
+  "responsePrompt": "How does it go?",
+  "responseOptions": [
+    {
+      "type": "pathiverse.interactionOption.action",
+      "label": "Great success!",
+      "action": {
+        "type": "pathiverse.action.resolveAndAdvanceScene",
+        "sceneIndicator": {
+          "type": "relativeUri",
+          "value": "/homeRun.json"
+        }
+      }
+    },
+    {
+      "type": "pathiverse.interactionOption.action",
+      "label": "Abysmal failure.",
+      "action": {
+        "type": "pathiverse.action.resolveAndAdvanceScene",
+        "sceneIndicator": {
+          "type": "relativeUri",
+          "value": "/shame.json"
+        }
+      }
+    }
+  ]
+}

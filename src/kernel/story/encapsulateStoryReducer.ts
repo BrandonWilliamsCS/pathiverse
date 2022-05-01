@@ -13,21 +13,17 @@ import { StoryState } from "./StoryState";
  * @param initialUserState - indicates the starting value for user state.
  * @typeParam S - Describes a scene within the contextual story.
  * @typeParam U - Describes the data that represents user-side state.
- * @typeParam A - describes possible actions.
  */
-export function encapsulateStoryReducer<S extends Scene, U, A extends Action>(
+export function encapsulateStoryReducer<S extends Scene, U>(
   initialScene: S,
-  userStateReducer: StateReducer<U, A>,
+  userStateReducer: StateReducer<U>,
   initialUserState: U,
-): StateCapsule<StoryState<S, U>, A> {
+): StateCapsule<StoryState<S, U>> {
   const initialBaseState = {
     scene: initialScene,
     userState: initialUserState,
   };
-  const baseReducer: StateReducer<StoryState<S, U>, A> = async (
-    state,
-    action,
-  ) => {
+  const baseReducer: StateReducer<StoryState<S, U>> = async (state, action) => {
     const [nextScene, nextUserState] = await Promise.all([
       reduceStoryState(state.scene, action),
       userStateReducer(state.userState, action),
@@ -38,9 +34,9 @@ export function encapsulateStoryReducer<S extends Scene, U, A extends Action>(
   return encapsulateReducer(baseReducer, initialBaseState);
 }
 
-function reduceStoryState<S extends Scene, A extends Action>(
+function reduceStoryState<S extends Scene>(
   scene: S,
-  action: A,
+  action: Action,
 ): Promise<S> {
   const nextScene = isAdvanceSceneAction<S>(action) ? action.scene : scene;
   return Promise.resolve(nextScene);

@@ -3,4 +3,5 @@
  */
 export interface Scene {
   name: string;
+  type: string;
 }

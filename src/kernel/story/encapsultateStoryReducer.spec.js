@@ -1,3 +1,4 @@
+import { advanceSceneActionType } from "./AdvanceSceneAction";
 import { encapsulateStoryReducer } from "./encapsulateStoryReducer";
 
 describe("encapsulateStoryReducer", () => {
@@ -33,7 +34,7 @@ describe("encapsulateStoryReducer", () => {
     );
     const nextScene = { name: "scene2" };
     const firstAction = {
-      type: "pathiverse.story.advanceScene",
+      type: advanceSceneActionType,
       scene: nextScene,
     };
     const [reducedState] = await firstApplier(firstAction);
@@ -77,7 +78,7 @@ describe("encapsulateStoryReducer", () => {
     );
     const nextScene = { name: "scene2" };
     const firstAction = {
-      type: "pathiverse.story.advanceScene",
+      type: advanceSceneActionType,
       scene: nextScene,
     };
     const [reducedState] = await firstApplier(firstAction);

@@ -1,3 +1,4 @@
+import { Action } from "../Action";
 import { ActionApplier } from "./ActionApplier";
 import { StateCapsule } from "./StateCapsule";
 import { StateReducer } from "./StateReducer";
@@ -7,13 +8,12 @@ import { StateReducer } from "./StateReducer";
  * @param reducer - provides the state reduction logic.
  * @param initialState - seeds the reduction sequence.
  * @typeParam S - describes possible values for states.
- * @typeParam A - describes possible actions.
  */
-export function encapsulateReducer<S, A>(
-  reducer: StateReducer<S, A>,
+export function encapsulateReducer<S>(
+  reducer: StateReducer<S>,
   initialState: S,
-): StateCapsule<S, A> {
-  const applier: ActionApplier<S, A> = async (action: A) => {
+): StateCapsule<S> {
+  const applier: ActionApplier<S> = async (action: Action) => {
     const nextState = await reducer(initialState, action);
     return encapsulateReducer(reducer, nextState);
   };
