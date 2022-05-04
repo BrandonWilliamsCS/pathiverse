@@ -20,8 +20,7 @@ export const ConsumptionScreen: React.FC = () => {
   return (
     <StoryViewer
       storySession={storySession}
-      contentRenderer={services.contentRenderer}
-      interactionOptionRenderer={services.interactionOptionRenderer}
+      interfaceElementRenderer={services.interfaceElementRenderer}
     />
   );
 };

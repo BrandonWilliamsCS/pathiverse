@@ -5,8 +5,7 @@ import {
   advanceSceneActionType,
 } from "kernel/story/AdvanceSceneAction";
 import { StoryState } from "kernel/story/StoryState";
-import { ContentRenderer } from "platform/react/ContentRenderer";
-import { InteractionOptionRenderer } from "platform/react/InteractionOptionRenderer";
+import { InterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import {
   isPlainTextContent,
   PlainTextContent,
@@ -16,18 +15,11 @@ import {
   ActionInteractionOption,
   isActionInteractionOption,
 } from "plugin/interactionOption/action/ActionInteractionOption";
+import { ActionInteractionOptionDisplay } from "plugin/interactionOption/action/ActionInteractionOptionDisplay";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
 import { ActionMiddleware } from "system/ActionMiddleware";
-import {
-  isResolveAndAdvanceSceneAction,
-  ResolveAndAdvanceSceneAction,
-} from "system/ResolveAndAdvanceSceneAction";
-import { ActionInteractionOptionDisplay } from "plugin/interactionOption/action/ActionInteractionOptionDisplay";
+import { isResolveAndAdvanceSceneAction } from "system/ResolveAndAdvanceSceneAction";
 import { getJsonResource } from "util/getJsonResource";
-
-export type AppAction =
-  | AdvanceSceneAction<ContentWithResponseScene>
-  | ResolveAndAdvanceSceneAction;
 
 const resolveSceneBeforeAdvanceActionMiddleware: ActionMiddleware<
   StoryState<ContentWithResponseScene, void>
@@ -42,24 +34,22 @@ const resolveSceneBeforeAdvanceActionMiddleware: ActionMiddleware<
     scene,
   } as AdvanceSceneAction<ContentWithResponseScene>);
 };
-const contentRenderer: ContentRenderer = {
-  canRender: isPlainTextContent,
-  render: (content) => (
-    <PlainTextContentDisplay content={content as PlainTextContent} />
-  ),
-};
-const interactionOptionRenderer: InteractionOptionRenderer = {
-  canRender: isActionInteractionOption,
-  render: (interactionOption, actionHandler) => (
-    <ActionInteractionOptionDisplay
-      interactionOption={interactionOption as ActionInteractionOption}
-      actionHandler={actionHandler}
-    />
-  ),
+const interfaceElementRenderer: InterfaceElementRenderer = {
+  canRender: (interfaceElement) =>
+    isActionInteractionOption(interfaceElement) ||
+    isPlainTextContent(interfaceElement),
+  render: (interfaceElement, actionHandler) =>
+    isActionInteractionOption(interfaceElement) ? (
+      <ActionInteractionOptionDisplay
+        interactionOption={interfaceElement as ActionInteractionOption}
+        actionHandler={actionHandler}
+      />
+    ) : (
+      <PlainTextContentDisplay content={interfaceElement as PlainTextContent} />
+    ),
 };
 
 export const services = {
   actionMiddleware: resolveSceneBeforeAdvanceActionMiddleware,
-  contentRenderer,
-  interactionOptionRenderer,
+  interfaceElementRenderer,
 };

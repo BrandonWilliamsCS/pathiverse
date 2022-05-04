@@ -1,6 +1,5 @@
 import { Scene } from "kernel/Scene";
-import { Content } from "system/Content";
-import { InteractionOption } from "system/InteractionOption";
+import { InterfaceElement } from "system/InterfaceElement";
 
 /** Describes a scene that presents content along with a list of options for response interactions */
 export const contentWithResponseSceneType =
@@ -9,7 +8,7 @@ export const contentWithResponseSceneType =
 /** A scene that presents content along with a list of options for response interactions */
 export interface ContentWithResponseScene extends Scene {
   type: typeof contentWithResponseSceneType;
-  content: Content;
+  content: InterfaceElement;
   responsePrompt?: string;
-  responseOptions: InteractionOption[];
+  responseOptions: InterfaceElement[];
 }

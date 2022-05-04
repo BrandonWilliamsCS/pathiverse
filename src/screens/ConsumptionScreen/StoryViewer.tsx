@@ -2,8 +2,7 @@ import React from "react";
 
 import { Action } from "kernel/Action";
 import { StoryState } from "kernel/story/StoryState";
-import { ContentRenderer } from "platform/react/ContentRenderer";
-import { InteractionOptionRenderer } from "platform/react/InteractionOptionRenderer";
+import { InterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
 import { ContentWithResponseStage } from "plugin/scene/contentWithResponse/ContentWithResponseStage";
 import { StorySession } from "system/StorySession";
@@ -11,13 +10,11 @@ import { useSubscribableValue } from "util/useSubscribableValue";
 
 export interface StoryViewerProps<S extends ContentWithResponseScene, U> {
   storySession: StorySession<StoryState<S, U>>;
-  contentRenderer: ContentRenderer;
-  interactionOptionRenderer: InteractionOptionRenderer;
+  interfaceElementRenderer: InterfaceElementRenderer;
 }
 
 export function StoryViewer<S extends ContentWithResponseScene, U>({
-  contentRenderer,
-  interactionOptionRenderer,
+  interfaceElementRenderer,
   storySession,
 }: StoryViewerProps<S, U>) {
   const [{ scene }, actionHandler] = useStorySessionProjection(storySession);
@@ -25,8 +22,7 @@ export function StoryViewer<S extends ContentWithResponseScene, U>({
     <ContentWithResponseStage
       scene={scene}
       actionHandler={actionHandler}
-      contentRenderer={contentRenderer}
-      interactionOptionRenderer={interactionOptionRenderer}
+      interfaceElementRenderer={interfaceElementRenderer}
     />
   );
 }
