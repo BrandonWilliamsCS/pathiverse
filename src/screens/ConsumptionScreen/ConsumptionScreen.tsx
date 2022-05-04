@@ -3,27 +3,33 @@ import React from "react";
 
 import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
+import { HostServices } from "platform/react/HostServices";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
-import { services } from "services";
 import { StorySession } from "system/StorySession";
 import { useFunctionInitRef } from "util/useFunctionInitRef";
 import { StoryViewer } from "./StoryViewer";
 
-export const ConsumptionScreen: React.FC = () => {
+export interface ConsumptionScreenProps<S> {
+  hostServices: HostServices<S>;
+}
+
+export function ConsumptionScreen<Sc extends ContentWithResponseScene>({
+  hostServices,
+}: ConsumptionScreenProps<StoryState<Sc, void>>) {
   const { current: storySession } = useFunctionInitRef(
     () =>
-      new StorySession<StoryState<ContentWithResponseScene, void>>(
-        encapsulateStoryReducer(initialScene, identity, undefined),
-        services.actionMiddleware,
+      new StorySession<StoryState<Sc, void>>(
+        encapsulateStoryReducer<Sc, void>(initialScene, identity, undefined),
+        hostServices.actionMiddleware,
       ),
   );
   return (
     <StoryViewer
       storySession={storySession}
-      interfaceElementRenderer={services.interfaceElementRenderer}
+      interfaceElementRenderer={hostServices.interfaceElementRenderer}
     />
   );
-};
+}
 
 const initialScene = {
   type: "pathiverse.scene.contentWithResponse",
@@ -57,4 +63,4 @@ const initialScene = {
       },
     },
   ],
-} as unknown as ContentWithResponseScene;
+} as any;
