@@ -1,10 +1,10 @@
 import { identity } from "lodash";
 import React from "react";
 
+import { Scene } from "kernel/Scene";
 import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
 import { HostServices } from "platform/react/HostServices";
-import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
 import { StorySession } from "system/StorySession";
 import { useFunctionInitRef } from "util/useFunctionInitRef";
 import { StoryViewer } from "./StoryViewer";
@@ -13,7 +13,7 @@ export interface ConsumptionScreenProps<S> {
   hostServices: HostServices<S>;
 }
 
-export function ConsumptionScreen<Sc extends ContentWithResponseScene>({
+export function ConsumptionScreen<Sc extends Scene>({
   hostServices,
 }: ConsumptionScreenProps<StoryState<Sc, void>>) {
   const { current: storySession } = useFunctionInitRef(

@@ -3,14 +3,15 @@ import { HostServicesBuilder } from "platform/react/HostServicesBuilder";
 import { plainTextContentRenderer } from "plugin/content/plainText/plainTextContentRenderer";
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
+import { contentWithResponseSceneRenderer } from "plugin/scene/contentWithResponse/contentWithResponseSceneRenderer";
 import { buildResolveSceneBeforeAdvanceActionMiddleware } from "system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionMiddleware";
 import { ResourceReader } from "system/resource/ResourceReader";
 import { getJsonResource } from "util/getJsonResource";
 
+export type HostedStateType = StoryState<ContentWithResponseScene, void>;
+
 export function hostSetup(
-  hostServicesBuilder: HostServicesBuilder<
-    StoryState<ContentWithResponseScene, void>
-  >,
+  hostServicesBuilder: HostServicesBuilder<HostedStateType>,
 ): void {
   const sceneReader: ResourceReader<ContentWithResponseScene> = {
     getResource: async (sceneIndicator) => {
@@ -22,6 +23,9 @@ export function hostSetup(
     buildResolveSceneBeforeAdvanceActionMiddleware(sceneReader);
   hostServicesBuilder.registerActionMiddleware(
     resolveSceneBeforeAdvanceActionMiddleware,
+  );
+  hostServicesBuilder.registerInterfaceElementRenderer(
+    contentWithResponseSceneRenderer,
   );
   hostServicesBuilder.registerInterfaceElementRenderer(
     plainTextContentRenderer,

@@ -12,3 +12,10 @@ export interface ContentWithResponseScene extends Scene {
   responsePrompt?: string;
   responseOptions: InterfaceElement[];
 }
+
+/** Detects whether a scene is of the "content with response" variety. */
+export function isContentWithResponseScene(
+  scene: InterfaceElement,
+): scene is ContentWithResponseScene {
+  return scene && scene.type === contentWithResponseSceneType;
+}

@@ -35,10 +35,10 @@ export class HostServicesBuilder<S> {
         this.interfaceElementRendererPieces.some((renderer) =>
           renderer.canRender(interfaceElement),
         ),
-      render: (interfaceElement, actionHandler) =>
+      render: (interfaceElement, actionHandler, interfaceElementRenderer) =>
         this.interfaceElementRendererPieces
           .find((renderer) => renderer.canRender(interfaceElement))!
-          .render(interfaceElement, actionHandler),
+          .render(interfaceElement, actionHandler, interfaceElementRenderer),
     };
   }
 }

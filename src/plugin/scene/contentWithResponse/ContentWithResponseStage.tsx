@@ -20,7 +20,11 @@ export function ContentWithResponseStage({
     <section className="stage contentWithResponse">
       <article className="content">
         <h3 className="name">{scene.name}</h3>
-        {interfaceElementRenderer.render(scene.content, actionHandler)}
+        {interfaceElementRenderer.render(
+          scene.content,
+          actionHandler,
+          interfaceElementRenderer,
+        )}
       </article>
       <nav>
         {scene.responsePrompt && (
@@ -30,7 +34,11 @@ export function ContentWithResponseStage({
           <ul className="responseOptions">
             {scene.responseOptions.map((responseOption, i) => (
               <li key={i} className="responseOption">
-                {interfaceElementRenderer.render(responseOption, actionHandler)}
+                {interfaceElementRenderer.render(
+                  responseOption,
+                  actionHandler,
+                  interfaceElementRenderer,
+                )}
               </li>
             ))}
           </ul>

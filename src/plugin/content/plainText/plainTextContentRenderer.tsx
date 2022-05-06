@@ -1,11 +1,11 @@
 import React from "react";
 
+import { InterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import {
   isPlainTextContent,
   PlainTextContent,
-} from "plugin/content/plainText/PlainTextContent";
-import { PlainTextContentDisplay } from "plugin/content/plainText/PlainTextContentDisplay";
-import { InterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
+} from "./PlainTextContent";
+import { PlainTextContentDisplay } from "./PlainTextContentDisplay";
 
 export const plainTextContentRenderer: InterfaceElementRenderer = {
   canRender: isPlainTextContent,

@@ -11,5 +11,6 @@ export interface InterfaceElementRenderer {
   render: (
     interfaceElement: InterfaceElement,
     actionHandler: (action: Action) => Promise<void>,
+    interfaceElementRenderer: InterfaceElementRenderer,
   ) => React.ReactNode;
 }

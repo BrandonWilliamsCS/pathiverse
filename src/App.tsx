@@ -1,17 +1,13 @@
 import React from "react";
 
-import { hostSetup } from "hostSetup";
-import { StoryState } from "kernel/story/StoryState";
+import { HostedStateType, hostSetup } from "hostSetup";
 import { HostServicesBuilder } from "platform/react/HostServicesBuilder";
-import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
 import { ConsumptionScreen } from "screens/ConsumptionScreen/ConsumptionScreen";
 import { useFunctionInitRef } from "util/useFunctionInitRef";
 
 function App() {
   const hostServices = useFunctionInitRef(() => {
-    const builder = new HostServicesBuilder<
-      StoryState<ContentWithResponseScene, void>
-    >();
+    const builder = new HostServicesBuilder<HostedStateType>();
     hostSetup(builder);
     return builder.build();
   }).current;
