@@ -1,5 +1,5 @@
 import { Action } from "kernel/Action";
-import { ResourceIndicator } from "./resource/ResourceIndicator";
+import { ResourceIndicator } from "../resource/ResourceIndicator";
 
 /** Describes an action that advances to a new scene after first resolving from an indicator. */
 export const resolveAndAdvanceSceneStoryType =

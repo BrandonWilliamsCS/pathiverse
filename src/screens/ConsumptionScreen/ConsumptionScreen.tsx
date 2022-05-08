@@ -1,30 +1,35 @@
 import { identity } from "lodash";
 import React from "react";
 
+import { Scene } from "kernel/Scene";
 import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
-import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
-import { services } from "services";
+import { HostServices } from "platform/react/HostServices";
 import { StorySession } from "system/StorySession";
 import { useFunctionInitRef } from "util/useFunctionInitRef";
 import { StoryViewer } from "./StoryViewer";
 
-export const ConsumptionScreen: React.FC = () => {
+export interface ConsumptionScreenProps<S> {
+  hostServices: HostServices<S>;
+}
+
+export function ConsumptionScreen<Sc extends Scene>({
+  hostServices,
+}: ConsumptionScreenProps<StoryState<Sc, void>>) {
   const { current: storySession } = useFunctionInitRef(
     () =>
-      new StorySession<StoryState<ContentWithResponseScene, void>>(
-        encapsulateStoryReducer(initialScene, identity, undefined),
-        services.actionMiddleware,
+      new StorySession<StoryState<Sc, void>>(
+        encapsulateStoryReducer<Sc, void>(initialScene, identity, undefined),
+        hostServices.actionMiddleware,
       ),
   );
   return (
     <StoryViewer
       storySession={storySession}
-      contentRenderer={services.contentRenderer}
-      interactionOptionRenderer={services.interactionOptionRenderer}
+      interfaceElementRenderer={hostServices.interfaceElementRenderer}
     />
   );
-};
+}
 
 const initialScene = {
   type: "pathiverse.scene.contentWithResponse",
@@ -58,4 +63,4 @@ const initialScene = {
       },
     },
   ],
-} as unknown as ContentWithResponseScene;
+} as any;

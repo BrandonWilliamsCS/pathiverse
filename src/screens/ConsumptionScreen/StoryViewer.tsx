@@ -1,33 +1,30 @@
 import React from "react";
 
 import { Action } from "kernel/Action";
+import { Scene } from "kernel/Scene";
 import { StoryState } from "kernel/story/StoryState";
-import { ContentRenderer } from "platform/react/ContentRenderer";
-import { InteractionOptionRenderer } from "platform/react/InteractionOptionRenderer";
-import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
-import { ContentWithResponseStage } from "plugin/scene/contentWithResponse/ContentWithResponseStage";
+import { InterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { StorySession } from "system/StorySession";
 import { useSubscribableValue } from "util/useSubscribableValue";
 
-export interface StoryViewerProps<S extends ContentWithResponseScene, U> {
+export interface StoryViewerProps<S extends Scene, U> {
   storySession: StorySession<StoryState<S, U>>;
-  contentRenderer: ContentRenderer;
-  interactionOptionRenderer: InteractionOptionRenderer;
+  interfaceElementRenderer: InterfaceElementRenderer;
 }
 
-export function StoryViewer<S extends ContentWithResponseScene, U>({
-  contentRenderer,
-  interactionOptionRenderer,
+export function StoryViewer<S extends Scene, U>({
+  interfaceElementRenderer,
   storySession,
 }: StoryViewerProps<S, U>) {
   const [{ scene }, actionHandler] = useStorySessionProjection(storySession);
   return (
-    <ContentWithResponseStage
-      scene={scene}
-      actionHandler={actionHandler}
-      contentRenderer={contentRenderer}
-      interactionOptionRenderer={interactionOptionRenderer}
-    />
+    <>
+      {interfaceElementRenderer.render(
+        scene,
+        actionHandler,
+        interfaceElementRenderer,
+      )}
+    </>
   );
 }
 

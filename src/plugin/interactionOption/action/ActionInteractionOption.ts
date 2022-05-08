@@ -1,12 +1,12 @@
 import { Action } from "kernel/Action";
-import { InteractionOption } from "system/InteractionOption";
+import { InterfaceElement } from "system/InterfaceElement";
 
 /** Describes an interaction option that represents a specific action */
 export const actionInteractionOptionType =
   "pathiverse.interactionOption.action" as const;
 
 /** An interaction option that represents a specific action. */
-export interface ActionInteractionOption extends InteractionOption {
+export interface ActionInteractionOption extends InterfaceElement {
   type: typeof actionInteractionOptionType;
   label: string;
   action: Action;
