@@ -5,4 +5,4 @@ import { Action } from "kernel/Action";
  * Named for the functional "reduce" pattern.
  * @typeParam S - describes possible values for states.
  */
-export type StateReducer<S> = (state: S, action: Action) => Promise<S>;
+export type StateReducer<S> = (state: S, action: Action) => S;

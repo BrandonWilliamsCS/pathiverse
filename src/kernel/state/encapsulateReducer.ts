@@ -13,8 +13,8 @@ export function encapsulateReducer<S>(
   reducer: StateReducer<S>,
   initialState: S,
 ): StateCapsule<S> {
-  const applier: ActionApplier<S> = async (action: Action) => {
-    const nextState = await reducer(initialState, action);
+  const applier: ActionApplier<S> = (action: Action) => {
+    const nextState = reducer(initialState, action);
     return encapsulateReducer(reducer, nextState);
   };
   return [initialState, applier];

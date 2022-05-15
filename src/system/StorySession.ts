@@ -28,9 +28,11 @@ export class StorySession<S> {
 
   public async applyAction(action: Action) {
     const [, baseActionApplier] = this.stateCapsuleSubject.value;
+    const baseMiddelwareRoot = (a: Action) =>
+      Promise.resolve(baseActionApplier(a));
     const actionApplier = this.actionMiddleware
-      ? (action: Action) => this.actionMiddleware!(action, baseActionApplier)
-      : baseActionApplier;
+      ? (action: Action) => this.actionMiddleware!(action, baseMiddelwareRoot)
+      : baseMiddelwareRoot;
     const newCapsule = await actionApplier(action);
     this.stateCapsuleSubject.next(newCapsule);
   }

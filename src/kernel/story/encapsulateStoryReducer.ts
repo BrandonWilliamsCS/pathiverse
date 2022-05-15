@@ -23,21 +23,17 @@ export function encapsulateStoryReducer<S extends Scene, U>(
     scene: initialScene,
     userState: initialUserState,
   };
-  const baseReducer: StateReducer<StoryState<S, U>> = async (state, action) => {
-    const [nextScene, nextUserState] = await Promise.all([
-      reduceStoryState(state.scene, action),
-      userStateReducer(state.userState, action),
-    ]);
+  const baseReducer: StateReducer<StoryState<S, U>> = (state, action) => {
     // TODO: Can allow for extensions here with StateCapsule mapper.
-    return { scene: nextScene, userState: nextUserState };
+    return {
+      scene: reduceStoryState(state.scene, action),
+      userState: userStateReducer(state.userState, action),
+    };
   };
   return encapsulateReducer(baseReducer, initialBaseState);
 }
 
-function reduceStoryState<S extends Scene>(
-  scene: S,
-  action: Action,
-): Promise<S> {
-  const nextScene = isAdvanceSceneAction<S>(action) ? action.scene : scene;
-  return Promise.resolve(nextScene);
+function reduceStoryState<Sc extends Scene>(scene: Sc, action: Action): Sc {
+  const nextScene = isAdvanceSceneAction<Sc>(action) ? action.scene : scene;
+  return nextScene;
 }
