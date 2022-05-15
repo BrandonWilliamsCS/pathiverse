@@ -13,7 +13,8 @@
       "action": {
         "type": "pathiverse.action.resolveAndAdvanceScene",
         "sceneIndicator": {
-          "type": "relativeUri",
+          "type": "relativePath",
+          "requiresContext": true,
           "value": "/homeRun.json"
         }
       }
@@ -24,7 +25,8 @@
       "action": {
         "type": "pathiverse.action.resolveAndAdvanceScene",
         "sceneIndicator": {
-          "type": "relativeUri",
+          "type": "relativePath",
+          "requiresContext": true,
           "value": "/shame.json"
         }
       }

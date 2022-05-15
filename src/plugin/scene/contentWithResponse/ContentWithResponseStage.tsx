@@ -19,7 +19,7 @@ export function ContentWithResponseStage({
   return (
     <section className="stage contentWithResponse">
       <article className="content">
-        <h3 className="name">{scene.name}</h3>
+        <h3 className="scene-name">{scene.name}</h3>
         {interfaceElementRenderer.render(
           scene.content,
           actionHandler,

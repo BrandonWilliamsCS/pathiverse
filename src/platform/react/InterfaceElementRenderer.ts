@@ -14,3 +14,16 @@ export interface InterfaceElementRenderer {
     interfaceElementRenderer: InterfaceElementRenderer,
   ) => React.ReactNode;
 }
+
+export function buildCompositeInterfaceElementRenderer(
+  pieces: InterfaceElementRenderer[],
+): InterfaceElementRenderer {
+  return {
+    canRender: (interfaceElement) =>
+      pieces.some((renderer) => renderer.canRender(interfaceElement)),
+    render: (interfaceElement, actionHandler, interfaceElementRenderer) =>
+      pieces
+        .find((renderer) => renderer.canRender(interfaceElement))!
+        .render(interfaceElement, actionHandler, interfaceElementRenderer),
+  };
+}
