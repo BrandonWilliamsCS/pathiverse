@@ -1,22 +1,23 @@
+import { Scene } from "kernel/Scene";
 import {
   AdvanceSceneAction,
   advanceSceneActionType,
 } from "kernel/story/AdvanceSceneAction";
-import { ActionMiddleware } from "../ActionMiddleware";
+import { ActionTransformer } from "../ActionTransformer";
 import { ResourceReader } from "../resource/ResourceReader";
 import { isResolveAndAdvanceSceneAction } from "./ResolveAndAdvanceSceneAction";
 
-export function buildResolveSceneBeforeAdvanceActionMiddleware<Sc>(
-  sceneReader: ResourceReader<Sc>,
-): ActionMiddleware<any> {
-  return async (action, next) => {
+export function buildResolveSceneBeforeAdvanceActionTransformer<
+  Sc extends Scene,
+>(sceneReader: ResourceReader<Sc>): ActionTransformer {
+  return async (action) => {
     if (!isResolveAndAdvanceSceneAction(action)) {
-      return await next(action);
+      return await action;
     }
     const scene = await sceneReader.getResource(action.sceneIndicator);
-    return await next({
+    return (await {
       type: advanceSceneActionType,
       scene,
-    } as AdvanceSceneAction<any>);
+    }) as AdvanceSceneAction<Sc>;
   };
 }

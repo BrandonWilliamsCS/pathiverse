@@ -1,8 +1,7 @@
 import { DependencyRegistar } from "lib/unobtrusive-di-container";
 
 import { Scene } from "kernel/Scene";
-import { StoryState } from "kernel/story/StoryState";
-import { ActionMiddleware } from "system/ActionMiddleware";
+import { ActionTransformer } from "system/ActionTransformer";
 import { ResourceReader } from "system/resource/ResourceReader";
 import { StorySpecification } from "system/StorySpecification";
 import { InterfaceElementRenderer } from "./InterfaceElementRenderer";
@@ -16,7 +15,7 @@ export interface DependencyMap<Sc extends Scene, U> {
 
 export interface StoryDependencyMap<Sc extends Scene, U>
   extends DependencyMap<Sc, U> {
-  actionMiddleware: ActionMiddleware<StoryState<Sc, U>>;
+  actionTransformer: ActionTransformer;
   currentStory: StorySpecification<U>;
   interfaceElementRenderer: InterfaceElementRenderer;
   sceneReader: ResourceReader<Sc>;

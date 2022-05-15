@@ -9,7 +9,7 @@ import { plainTextContentRenderer } from "plugin/content/plainText/plainTextCont
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
 import { contentWithResponseSceneRenderer } from "plugin/scene/contentWithResponse/contentWithResponseSceneRenderer";
-import { buildResolveSceneBeforeAdvanceActionMiddleware } from "system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionMiddleware";
+import { buildResolveSceneBeforeAdvanceActionTransformer } from "system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionTransformer";
 import { ResourceIndicator } from "system/resource/ResourceIndicator";
 import { ResourceReader } from "system/resource/ResourceReader";
 import { StorySpecification } from "system/StorySpecification";
@@ -47,8 +47,8 @@ export function registerStoryDependencies(
       currentStory.relativeSceneRoot,
     );
   });
-  registrar.registerFactory("actionMiddleware", (registry) =>
-    buildResolveSceneBeforeAdvanceActionMiddleware(
+  registrar.registerFactory("actionTransformer", (registry) =>
+    buildResolveSceneBeforeAdvanceActionTransformer(
       registry.resolveDependency("sceneReader"),
     ),
   );

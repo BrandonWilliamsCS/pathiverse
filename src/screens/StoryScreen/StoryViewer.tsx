@@ -22,7 +22,7 @@ export function StoryViewer<Sc extends Scene, U>({
     React.useState<StorySession<StoryState<Sc, U>>>();
   React.useEffect(() => {
     const sceneReader = getDependencies("sceneReader");
-    const actionMiddleware = getDependencies("actionMiddleware");
+    const actionTransformer = getDependencies("actionTransformer");
     sceneReader
       .getResource(storySpec.initialSceneIndicator)
       .then((initialScene) => {
@@ -33,7 +33,7 @@ export function StoryViewer<Sc extends Scene, U>({
               identity,
               storySpec.initialUserState,
             ),
-            actionMiddleware,
+            actionTransformer,
           ),
         );
       });

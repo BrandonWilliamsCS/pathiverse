@@ -2,7 +2,7 @@ import { BehaviorSubject, map, Observable } from "rxjs";
 
 import { Action } from "kernel/Action";
 import { StateCapsule } from "kernel/state/StateCapsule";
-import { ActionMiddleware } from "./ActionMiddleware";
+import { ActionTransformer } from "./ActionTransformer";
 
 /**
  * Maintains a single session of state as actions are applied to an initial `StateCapsule`.
@@ -21,19 +21,17 @@ export class StorySession<S> {
 
   public constructor(
     initialStateCapsule: StateCapsule<S>,
-    private readonly actionMiddleware?: ActionMiddleware<S>,
+    private readonly actionTransformer?: ActionTransformer,
   ) {
     this.stateCapsuleSubject = new BehaviorSubject(initialStateCapsule);
   }
 
   public async applyAction(action: Action) {
-    const [, baseActionApplier] = this.stateCapsuleSubject.value;
-    const baseMiddelwareRoot = (a: Action) =>
-      Promise.resolve(baseActionApplier(a));
-    const actionApplier = this.actionMiddleware
-      ? (action: Action) => this.actionMiddleware!(action, baseMiddelwareRoot)
-      : baseMiddelwareRoot;
-    const newCapsule = await actionApplier(action);
+    const [, actionApplier] = this.stateCapsuleSubject.value;
+    const transformedAction = this.actionTransformer
+      ? await this.actionTransformer(action)
+      : action;
+    const newCapsule = actionApplier(transformedAction);
     this.stateCapsuleSubject.next(newCapsule);
   }
 }
