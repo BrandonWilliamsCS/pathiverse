@@ -5,7 +5,7 @@ import { StorySession } from "system/StorySession";
 
 export function useStorySessionProjection<S>(
   storySession: StorySession<S>,
-): [S, (action: Action) => Promise<void>] {
+): [S, (action: Action) => void] {
   const state = useSubscribableValue(
     storySession.states,
     storySession.currentState,

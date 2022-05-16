@@ -7,7 +7,7 @@ import { StoryState } from "kernel/story/StoryState";
 import { StoryDependencyMap } from "./DependencyMap";
 
 export interface SceneViewerProps<Sc extends Scene, U> {
-  actionHandler: (action: Action) => Promise<void>;
+  actionHandler: (action: Action) => void;
   state: StoryState<Sc, U>;
 }
 
@@ -15,14 +15,17 @@ export function SceneViewer<Sc extends Scene, U>({
   actionHandler,
   state,
 }: SceneViewerProps<Sc, U>) {
-  const interfaceElementRenderer = useDependencies<StoryDependencyMap<Sc, U>>()(
-    "interfaceElementRenderer",
-  );
+  const getDependencies = useDependencies<StoryDependencyMap<Sc, U>>();
+  const actionTransformer = getDependencies("actionTransformer");
+  const interfaceElementRenderer = getDependencies("interfaceElementRenderer");
   return (
     <>
       {interfaceElementRenderer.render(
         state.scene,
-        actionHandler,
+        async (action) => {
+          const transformedAction = await actionTransformer(action);
+          actionHandler(transformedAction);
+        },
         interfaceElementRenderer,
       )}
     </>
