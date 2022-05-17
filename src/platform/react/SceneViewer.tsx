@@ -15,17 +15,14 @@ export function SceneViewer<Sc extends Scene, U>({
   actionHandler,
   state,
 }: SceneViewerProps<Sc, U>) {
-  const getDependencies = useDependencies<StoryDependencyMap<Sc, U>>();
-  const actionTransformer = getDependencies("actionTransformer");
-  const interfaceElementRenderer = getDependencies("interfaceElementRenderer");
+  const interfaceElementRenderer = useDependencies<StoryDependencyMap<U>>()(
+    "interfaceElementRenderer",
+  );
   return (
     <>
       {interfaceElementRenderer.render(
         state.scene,
-        async (action) => {
-          const transformedAction = await actionTransformer(action);
-          actionHandler(transformedAction);
-        },
+        actionHandler,
         interfaceElementRenderer,
       )}
     </>

@@ -10,7 +10,7 @@ export interface InterfaceElementRenderer {
   canRender: (interfaceElement: InterfaceElement) => boolean;
   render: (
     interfaceElement: InterfaceElement,
-    actionHandler: (action: Action) => Promise<void>,
+    actionHandler: (action: Action) => void,
     interfaceElementRenderer: InterfaceElementRenderer,
   ) => React.ReactNode;
 }

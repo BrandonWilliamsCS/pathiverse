@@ -1,22 +1,13 @@
-import { DependencyRegistar } from "lib/unobtrusive-di-container";
-
-import { Scene } from "kernel/Scene";
-import { ActionTransformer } from "system/ActionTransformer";
 import { ResourceReader } from "system/resource/ResourceReader";
 import { StorySpecification } from "system/StorySpecification";
 import { InterfaceElementRenderer } from "./InterfaceElementRenderer";
 
-export interface DependencyMap<Sc extends Scene, U> {
+export interface DependencyMap<U> {
   storyReader: ResourceReader<StorySpecification<U>>;
-  registerStoryDependencies: (
-    registrar: DependencyRegistar<StoryDependencyMap<Sc, U>>,
-  ) => void;
 }
 
-export interface StoryDependencyMap<Sc extends Scene, U>
-  extends DependencyMap<Sc, U> {
-  actionTransformer: ActionTransformer;
+export interface StoryDependencyMap<U>
+  extends DependencyMap<U> {
   currentStory: StorySpecification<U>;
   interfaceElementRenderer: InterfaceElementRenderer;
-  sceneReader: ResourceReader<Sc>;
 }

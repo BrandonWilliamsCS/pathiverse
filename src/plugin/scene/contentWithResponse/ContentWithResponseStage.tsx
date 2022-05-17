@@ -1,12 +1,14 @@
+import { useDependencies } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
 import { Action } from "kernel/Action";
 import { InterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { ContentWithResponseScene } from "./ContentWithResponseScene";
+import { DependencyMap } from "./DependencyMap";
 
 export interface ContentWithResponseStageProps {
   scene: ContentWithResponseScene;
-  actionHandler: (action: Action) => Promise<void>;
+  actionHandler: (action: Action) => void;
   interfaceElementRenderer: InterfaceElementRenderer;
 }
 
@@ -16,13 +18,29 @@ export function ContentWithResponseStage({
   interfaceElementRenderer,
   scene,
 }: ContentWithResponseStageProps) {
+  const [isProcessing, setIsProcessing] = React.useState(false);
+  const actionTransformer =
+    useDependencies<DependencyMap>()("actionTransformer");
+  const handleAction = async (action: Action) => {
+    try {
+      setIsProcessing(true);
+      const transformedAction = await actionTransformer(action);
+      actionHandler(transformedAction);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
   return (
-    <section className="stage contentWithResponse">
+    <section
+      className={`stage contentWithResponse${
+        isProcessing ? " processing" : ""
+      }`}
+    >
       <article className="content">
         <h3 className="scene-name">{scene.name}</h3>
         {interfaceElementRenderer.render(
           scene.content,
-          actionHandler,
+          handleAction,
           interfaceElementRenderer,
         )}
       </article>
@@ -36,7 +54,7 @@ export function ContentWithResponseStage({
               <li key={i} className="responseOption">
                 {interfaceElementRenderer.render(
                   responseOption,
-                  actionHandler,
+                  handleAction,
                   interfaceElementRenderer,
                 )}
               </li>

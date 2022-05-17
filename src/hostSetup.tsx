@@ -1,9 +1,5 @@
 import { DependencyRegistar } from "lib/unobtrusive-di-container";
 
-import {
-  DependencyMap,
-  StoryDependencyMap,
-} from "platform/react/DependencyMap";
 import { buildCompositeInterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { plainTextContentRenderer } from "plugin/content/plainText/plainTextContentRenderer";
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
@@ -14,6 +10,7 @@ import { ResourceIndicator } from "system/resource/ResourceIndicator";
 import { ResourceReader } from "system/resource/ResourceReader";
 import { StorySpecification } from "system/StorySpecification";
 import { getJsonResource } from "util/getJsonResource";
+import { DependencyMap, StoryDependencyMap } from "./DependencyMap";
 
 export type HostedSceneType = ContentWithResponseScene;
 export type HostedUserStateType = void;

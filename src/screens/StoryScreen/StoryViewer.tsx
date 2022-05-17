@@ -5,9 +5,9 @@ import React from "react";
 import { Scene } from "kernel/Scene";
 import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
-import { StoryDependencyMap } from "platform/react/DependencyMap";
 import { StorySession } from "system/StorySession";
 import { StorySpecification } from "system/StorySpecification";
+import { StoryDependencyMap } from "../../DependencyMap";
 import { StorySessionViewer } from "./StorySessionViewer";
 
 export interface StoryViewerProps<U> {

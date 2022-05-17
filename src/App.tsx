@@ -6,8 +6,8 @@ import {
   HostedSceneType,
   HostedUserStateType,
 } from "hostSetup";
-import { DependencyMap } from "platform/react/DependencyMap";
 import { StoryScreen } from "screens/StoryScreen/StoryScreen";
+import { DependencyMap } from "./DependencyMap";
 
 function App() {
   return (
