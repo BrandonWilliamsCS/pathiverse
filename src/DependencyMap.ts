@@ -16,7 +16,7 @@ export interface DependencyMap<Sc extends Scene, U>
 }
 
 export interface StoryDependencyMap<Sc extends Scene, U>
-  extends PlaformStoryDependencyMap<U>,
+  extends PlaformStoryDependencyMap<Sc, U>,
     SceneRendererDependencyMap {
   sceneReader: ResourceReader<Sc>;
 }

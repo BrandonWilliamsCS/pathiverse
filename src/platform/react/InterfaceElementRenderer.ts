@@ -3,27 +3,30 @@ import React from "react";
 import { Action } from "kernel/Action";
 import { InterfaceElement } from "system/InterfaceElement";
 
+export interface InterfaceElementRenderArgs<S> {
+  interfaceElement: InterfaceElement;
+  state: S;
+  actionHandler: (action: Action) => void;
+  interfaceElementRenderer: InterfaceElementRenderer<S>;
+}
+
 /**
  * An abstraction around the logic to render an element of the UI.
  */
-export interface InterfaceElementRenderer {
+export interface InterfaceElementRenderer<S> {
   canRender: (interfaceElement: InterfaceElement) => boolean;
-  render: (
-    interfaceElement: InterfaceElement,
-    actionHandler: (action: Action) => void,
-    interfaceElementRenderer: InterfaceElementRenderer,
-  ) => React.ReactNode;
+  render: (args: InterfaceElementRenderArgs<S>) => React.ReactNode;
 }
 
-export function buildCompositeInterfaceElementRenderer(
-  pieces: InterfaceElementRenderer[],
-): InterfaceElementRenderer {
+export function buildCompositeInterfaceElementRenderer<S>(
+  pieces: InterfaceElementRenderer<S>[],
+): InterfaceElementRenderer<S> {
   return {
     canRender: (interfaceElement) =>
       pieces.some((renderer) => renderer.canRender(interfaceElement)),
-    render: (interfaceElement, actionHandler, interfaceElementRenderer) =>
+    render: (args) =>
       pieces
-        .find((renderer) => renderer.canRender(interfaceElement))!
-        .render(interfaceElement, actionHandler, interfaceElementRenderer),
+        .find((renderer) => renderer.canRender(args.interfaceElement))!
+        .render(args),
   };
 }

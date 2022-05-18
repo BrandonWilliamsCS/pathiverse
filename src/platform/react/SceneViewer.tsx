@@ -15,16 +15,17 @@ export function SceneViewer<Sc extends Scene, U>({
   actionHandler,
   state,
 }: SceneViewerProps<Sc, U>) {
-  const interfaceElementRenderer = useDependencies<StoryDependencyMap<U>>()(
+  const interfaceElementRenderer = useDependencies<StoryDependencyMap<Sc, U>>()(
     "interfaceElementRenderer",
   );
   return (
     <>
-      {interfaceElementRenderer.render(
-        state.scene,
+      {interfaceElementRenderer.render({
+        interfaceElement: state.scene,
+        state,
         actionHandler,
         interfaceElementRenderer,
-      )}
+      })}
     </>
   );
 }

@@ -2,19 +2,28 @@ import { DependencyRegistar } from "lib/unobtrusive-di-container";
 import { DependencyProvider } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
+import { Scene } from "kernel/Scene";
 import { StoryDependencyMap } from "platform/react/DependencyMap";
 import { StorySpecification } from "system/StorySpecification";
 
-export interface StoryViewerProps<U, SDM extends StoryDependencyMap<U>> {
+export interface StoryViewerProps<
+  Sc extends Scene,
+  U,
+  SDM extends StoryDependencyMap<Sc, U>,
+> {
   storySpec: StorySpecification<U>;
   registerStoryDependencies: (registrar: DependencyRegistar<SDM>) => void;
 }
 
-export function StoryDependencyProvider<U, SDM extends StoryDependencyMap<U>>({
+export function StoryDependencyProvider<
+  Sc extends Scene,
+  U,
+  SDM extends StoryDependencyMap<Sc, U>,
+>({
   children,
   registerStoryDependencies,
   storySpec,
-}: React.PropsWithChildren<StoryViewerProps<U, SDM>>) {
+}: React.PropsWithChildren<StoryViewerProps<Sc, U, SDM>>) {
   return (
     <DependencyProvider<SDM>
       key={storySpec.id}

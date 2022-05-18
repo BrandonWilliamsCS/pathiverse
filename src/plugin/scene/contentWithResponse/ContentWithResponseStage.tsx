@@ -6,18 +6,20 @@ import { InterfaceElementRenderer } from "platform/react/InterfaceElementRendere
 import { ContentWithResponseScene } from "./ContentWithResponseScene";
 import { DependencyMap } from "./DependencyMap";
 
-export interface ContentWithResponseStageProps {
-  scene: ContentWithResponseScene;
+export interface ContentWithResponseStageProps<S> {
   actionHandler: (action: Action) => void;
-  interfaceElementRenderer: InterfaceElementRenderer;
+  interfaceElementRenderer: InterfaceElementRenderer<S>;
+  scene: ContentWithResponseScene;
+  state: S;
 }
 
 /** Renders a `ContentWithResponseScene` by expressing its content followed by a list of response options. */
-export function ContentWithResponseStage({
+export function ContentWithResponseStage<S>({
   actionHandler,
   interfaceElementRenderer,
   scene,
-}: ContentWithResponseStageProps) {
+  state,
+}: ContentWithResponseStageProps<S>) {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const actionTransformer =
     useDependencies<DependencyMap>()("actionTransformer");
@@ -38,11 +40,12 @@ export function ContentWithResponseStage({
     >
       <article className="content">
         <h3 className="scene-name">{scene.name}</h3>
-        {interfaceElementRenderer.render(
-          scene.content,
-          handleAction,
+        {interfaceElementRenderer.render({
+          interfaceElement: scene.content,
+          state,
+          actionHandler: handleAction,
           interfaceElementRenderer,
-        )}
+        })}
       </article>
       <nav>
         {scene.responsePrompt && (
@@ -52,11 +55,12 @@ export function ContentWithResponseStage({
           <ul className="responseOptions">
             {scene.responseOptions.map((responseOption, i) => (
               <li key={i} className="responseOption">
-                {interfaceElementRenderer.render(
-                  responseOption,
-                  handleAction,
+                {interfaceElementRenderer.render({
+                  interfaceElement: responseOption,
+                  state,
+                  actionHandler: handleAction,
                   interfaceElementRenderer,
-                )}
+                })}
               </li>
             ))}
           </ul>

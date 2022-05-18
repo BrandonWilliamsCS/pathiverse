@@ -25,7 +25,7 @@ export function StoryScreen<Sc extends Scene, U>({
     storyReader.getResource(storyIndicator).then(setStorySpec);
   }, [storyReader, storyIndicator]);
   return storySpec ? (
-    <StoryDependencyProvider<U, StoryDependencyMap<Sc, U>>
+    <StoryDependencyProvider<Sc, U, StoryDependencyMap<Sc, U>>
       storySpec={storySpec}
       registerStoryDependencies={registerStoryDependencies}
     >
