@@ -5,10 +5,10 @@ import React from "react";
 import { Scene } from "kernel/Scene";
 import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
-import { StorySession } from "system/StorySession";
+import { StateSessionTracker } from "system/StateSessionTracker";
 import { StorySpecification } from "system/StorySpecification";
 import { StoryDependencyMap } from "../../DependencyMap";
-import { StorySessionViewer } from "./StorySessionViewer";
+import { StateSessionTrackerViewer } from "./StateSessionTrackerViewer";
 
 export interface StoryViewerProps<U> {
   storySpec: StorySpecification<U>;
@@ -18,15 +18,15 @@ export function StoryViewer<Sc extends Scene, U>({
   storySpec,
 }: StoryViewerProps<U>) {
   const getDependencies = useDependencies<StoryDependencyMap<Sc, U>>();
-  const [storySession, setStorySession] =
-    React.useState<StorySession<StoryState<Sc, U>>>();
+  const [stateSessionTracker, setStateSessionTracker] =
+    React.useState<StateSessionTracker<StoryState<Sc, U>>>();
   React.useEffect(() => {
     const sceneReader = getDependencies("sceneReader");
     sceneReader
       .getResource(storySpec.initialSceneIndicator)
       .then((initialScene) => {
-        setStorySession(
-          new StorySession<StoryState<Sc, U>>(
+        setStateSessionTracker(
+          new StateSessionTracker<StoryState<Sc, U>>(
             encapsulateStoryReducer<Sc, U>(
               initialScene,
               identity,
@@ -40,7 +40,11 @@ export function StoryViewer<Sc extends Scene, U>({
     <div className="story">
       <h2 className="story-name">{storySpec.name}</h2>
       <div className="story-content">
-        {storySession && <StorySessionViewer storySession={storySession} />}
+        {stateSessionTracker && (
+          <StateSessionTrackerViewer
+            stateSessionTracker={stateSessionTracker}
+          />
+        )}
       </div>
     </div>
   );

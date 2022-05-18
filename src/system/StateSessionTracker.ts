@@ -7,7 +7,7 @@ import { StateCapsule } from "kernel/state/StateCapsule";
  * Maintains a single session of state as actions are applied to an initial `StateCapsule`.
  * @typeParam S - Represents the state values possible during this session
  */
-export class StorySession<S> {
+export class StateSessionTracker<S> {
   private readonly stateCapsuleSubject: BehaviorSubject<StateCapsule<S>>;
 
   public get currentState(): S {
