@@ -21,6 +21,14 @@ export function registerDependencies(
   >,
 ) {
   registrar.registerInstance(
+    "interfaceElementRenderer",
+    buildCompositeInterfaceElementRenderer([
+      contentWithResponseSceneRenderer,
+      plainTextContentRenderer,
+      actionInteractionOptionRenderer,
+    ]),
+  );
+  registrar.registerInstance(
     "storyReader",
     getReaderForContext<StorySpecification<HostedUserStateType>>({
       type: "httpUrl",
@@ -48,14 +56,6 @@ export function registerStoryDependencies(
     buildResolveSceneBeforeAdvanceActionTransformer(
       registry.resolveDependency("sceneReader"),
     ),
-  );
-  registrar.registerInstance(
-    "interfaceElementRenderer",
-    buildCompositeInterfaceElementRenderer([
-      contentWithResponseSceneRenderer,
-      plainTextContentRenderer,
-      actionInteractionOptionRenderer,
-    ]),
   );
 }
 

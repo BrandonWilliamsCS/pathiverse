@@ -3,8 +3,8 @@ import { DependencyProvider } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
 import { Scene } from "kernel/Scene";
-import { StoryDependencyMap } from "platform/react/DependencyMap";
 import { StorySpecification } from "system/StorySpecification";
+import { StoryDependencyMap } from "./DependencyMap";
 
 export interface StoryViewerProps<
   Sc extends Scene,
