@@ -1,4 +1,4 @@
-import { DependencyRegistar } from "lib/unobtrusive-di-container";
+import { DependencyRegistrar } from "lib/unobtrusive-di-container";
 
 import { buildCompositeInterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { plainTextContentRenderer } from "plugin/content/plainText/plainTextContentRenderer";
@@ -16,7 +16,7 @@ export type HostedSceneType = ContentWithResponseScene;
 export type HostedUserStateType = void;
 
 export function registerDependencies(
-  registrar: DependencyRegistar<
+  registrar: DependencyRegistrar<
     DependencyMap<HostedSceneType, HostedUserStateType>
   >,
 ) {
@@ -42,7 +42,7 @@ export function registerDependencies(
 }
 
 export function registerStoryDependencies(
-  registrar: DependencyRegistar<
+  registrar: DependencyRegistrar<
     StoryDependencyMap<HostedSceneType, HostedUserStateType>
   >,
 ) {

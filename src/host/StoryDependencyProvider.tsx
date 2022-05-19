@@ -1,4 +1,4 @@
-import { DependencyRegistar } from "lib/unobtrusive-di-container";
+import { DependencyRegistrar } from "lib/unobtrusive-di-container";
 import { DependencyProvider } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
@@ -12,7 +12,7 @@ export interface StoryViewerProps<
   SDM extends StoryDependencyMap<Sc, U>,
 > {
   storySpec: StorySpecification<U>;
-  registerStoryDependencies: (registrar: DependencyRegistar<SDM>) => void;
+  registerStoryDependencies: (registrar: DependencyRegistrar<SDM>) => void;
 }
 
 export function StoryDependencyProvider<

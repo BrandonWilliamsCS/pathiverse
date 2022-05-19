@@ -1,12 +1,13 @@
 import { BaseDependencyMap } from "./BaseDependencyMap";
 import { DependencyFactory } from "./DependencyFactory";
-import { DependencyRegistar } from "./DependencyRegistrar";
-import { DependencyRegistry } from "./DependencyRegistry";
+import { DependencyRegistrar } from "./DependencyRegistrar";
 import { RegistrationMap } from "./RegistrationMap";
+import { DependencyRegistry } from "./registry/DependencyRegistry";
+import { MappingDependencyRegistry } from "./registry/MappingDependencyRegistry";
 
-/** A DependencyRegistar that serves to build a Registry from its registrations */
+/** A DependencyRegistrar that serves to build a Registry from its registrations */
 export class DependencyRegistryBuilder<T = BaseDependencyMap>
-  implements DependencyRegistar<T>
+  implements DependencyRegistrar<T>
 {
   private readonly registrationMap: RegistrationMap<T> =
     {} as RegistrationMap<T>;
@@ -23,7 +24,7 @@ export class DependencyRegistryBuilder<T = BaseDependencyMap>
     this.registrationMap[key] = { type: "factory", factory, transient };
   }
 
-  build(parentRegistry?: DependencyRegistry<T>): DependencyRegistry<T> {
-    return new DependencyRegistry<T>(this.registrationMap, parentRegistry);
+  build(): DependencyRegistry<T> {
+    return new MappingDependencyRegistry<T>(this.registrationMap);
   }
 }
