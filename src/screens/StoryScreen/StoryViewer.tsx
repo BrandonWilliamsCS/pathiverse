@@ -2,12 +2,12 @@ import { useDependencies } from "lib/unobtrusive-di-container/react";
 import { identity } from "lodash";
 import React from "react";
 
+import { StoryDependencyMap } from "host/DependencyMap";
 import { Scene } from "kernel/Scene";
 import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
 import { StateSessionTracker } from "system/StateSessionTracker";
 import { StorySpecification } from "system/StorySpecification";
-import { StoryDependencyMap } from "../../DependencyMap";
 import { StateSessionTrackerViewer } from "./StateSessionTrackerViewer";
 
 export interface StoryViewerProps<U> {

@@ -1,13 +1,13 @@
 import { DependencyProvider } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
+import { DependencyMap } from "host/DependencyMap";
 import {
   registerDependencies,
   HostedSceneType,
   HostedUserStateType,
-} from "hostSetup";
+} from "host/hostSetup";
 import { StoryScreen } from "screens/StoryScreen/StoryScreen";
-import { DependencyMap } from "./DependencyMap";
 
 function App() {
   return (

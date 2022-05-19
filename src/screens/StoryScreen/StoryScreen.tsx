@@ -1,11 +1,11 @@
 import { useDependencies } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
+import { DependencyMap, StoryDependencyMap } from "host/DependencyMap";
+import { StoryDependencyProvider } from "host/StoryDependencyProvider";
 import { Scene } from "kernel/Scene";
 import { ResourceIndicator } from "system/resource/ResourceIndicator";
 import { StorySpecification } from "system/StorySpecification";
-import { DependencyMap, StoryDependencyMap } from "../../DependencyMap";
-import { StoryDependencyProvider } from "../../StoryDependencyProvider";
 import { StoryViewer } from "./StoryViewer";
 
 export interface StoryScreenProps {
