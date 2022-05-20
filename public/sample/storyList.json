@@ -1,0 +1,16 @@
+[
+  {
+    "id": "baseball",
+    "name": "Take Me out to the Ball Game",
+    "relativeSceneRoot": {
+      "type": "httpUrl",
+      "requiresContext": false,
+      "value": "/sample/scenes/baseball"
+    },
+    "initialSceneIndicator": {
+      "type": "relativePath",
+      "requiresContext": true,
+      "value": "upToBat.json"
+    }
+  }
+]

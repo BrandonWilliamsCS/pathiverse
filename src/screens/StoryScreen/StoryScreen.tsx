@@ -3,20 +3,15 @@ import {
   useDependencies,
 } from "lib/unobtrusive-di-container/react";
 import React from "react";
+import { useParams } from "react-router-dom";
 
 import { DependencyMap, StoryDependencyMap } from "host/DependencyMap";
 import { Session } from "host/Session";
 import { Scene } from "kernel/Scene";
-import { ResourceIndicator } from "system/resource/ResourceIndicator";
 import { SessionViewer } from "./SessionViewer";
 
-export interface StoryScreenProps {
-  storyIndicator: ResourceIndicator;
-}
-
-export function StoryScreen<Sc extends Scene, U>({
-  storyIndicator,
-}: StoryScreenProps) {
+export function StoryScreen<Sc extends Scene, U>() {
+  const { storyId } = useParams();
   const getDependencies = useDependencies<DependencyMap<Sc, U>>();
   const sessionGenerator = getDependencies("initialSessionGenerator");
   const registerStoryDependencies = getDependencies(
@@ -24,8 +19,8 @@ export function StoryScreen<Sc extends Scene, U>({
   );
   const [session, setSession] = React.useState<Session<Sc, U>>();
   React.useEffect(() => {
-    sessionGenerator(storyIndicator).then(setSession);
-  }, [sessionGenerator, storyIndicator]);
+    sessionGenerator(storyId!).then(setSession);
+  }, [sessionGenerator, storyId]);
   return session ? (
     <DependencyProvider<StoryDependencyMap<Sc, U>>
       key={session.storySpecification.id}

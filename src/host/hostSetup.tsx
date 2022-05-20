@@ -33,6 +33,7 @@ export function registerDependencies(
       actionInteractionOptionRenderer,
     ]),
   );
+  registrar.registerInstance("storyListSource", storyListSource);
   registrar.registerInstance("initialSessionGenerator", generateInitialSession);
   registrar.registerInstance(
     "registerStoryDependencies",
@@ -58,14 +59,14 @@ export function registerStoryDependencies(
   );
 }
 
-async function generateInitialSession<Sc extends Scene, U>(
-  storySpecIndicator: ResourceIndicator,
-) {
-  const storyReader = getReaderForContext<StorySpecification<U>>({
-    type: "httpUrl",
-    value: `/sample/stories`,
-  });
-  const storySpecification = await storyReader.getResource(storySpecIndicator);
+async function generateInitialSession<Sc extends Scene, U>(storyId: string) {
+  const storyList = await storyListSource<U>();
+  const storySpecification = storyList.find(
+    (storySpec) => storySpec.id === storyId,
+  );
+  if (!storySpecification) {
+    throw new Error(`Cannot find story with id ${storyId}`);
+  }
   const sceneReader = getReaderForContext<Sc>(
     storySpecification.relativeSceneRoot,
   );
@@ -137,3 +138,10 @@ function joinPaths(parts: string[]) {
   });
   return parts.join(separator);
 }
+
+const storyListSource = <U,>() =>
+  getReaderForContext<StorySpecification<U>[]>().getResource({
+    type: "httpUrl",
+    requiresContext: false,
+    value: "/sample/storyList.json",
+  });
