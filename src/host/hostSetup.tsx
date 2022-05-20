@@ -1,5 +1,9 @@
 import { DependencyRegistrar } from "lib/unobtrusive-di-container";
+import { identity } from "lodash";
 
+import { Scene } from "kernel/Scene";
+import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
+import { StoryState } from "kernel/story/StoryState";
 import { buildCompositeInterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { plainTextContentRenderer } from "plugin/content/plainText/plainTextContentRenderer";
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
@@ -8,6 +12,7 @@ import { contentWithResponseSceneRenderer } from "plugin/scene/contentWithRespon
 import { buildResolveSceneBeforeAdvanceActionTransformer } from "system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionTransformer";
 import { ResourceIndicator } from "system/resource/ResourceIndicator";
 import { ResourceReader } from "system/resource/ResourceReader";
+import { StateSessionTracker } from "system/StateSessionTracker";
 import { StorySpecification } from "system/StorySpecification";
 import { getJsonResource } from "util/getJsonResource";
 import { DependencyMap, StoryDependencyMap } from "./DependencyMap";
@@ -28,13 +33,7 @@ export function registerDependencies(
       actionInteractionOptionRenderer,
     ]),
   );
-  registrar.registerInstance(
-    "storyReader",
-    getReaderForContext<StorySpecification<HostedUserStateType>>({
-      type: "httpUrl",
-      value: `/sample/stories`,
-    }),
-  );
+  registrar.registerInstance("initialSessionGenerator", generateInitialSession);
   registrar.registerInstance(
     "registerStoryDependencies",
     registerStoryDependencies,
@@ -57,6 +56,32 @@ export function registerStoryDependencies(
       registry.resolveDependency("sceneReader"),
     ),
   );
+}
+
+async function generateInitialSession<Sc extends Scene, U>(
+  storySpecIndicator: ResourceIndicator,
+) {
+  const storyReader = getReaderForContext<StorySpecification<U>>({
+    type: "httpUrl",
+    value: `/sample/stories`,
+  });
+  const storySpecification = await storyReader.getResource(storySpecIndicator);
+  const sceneReader = getReaderForContext<Sc>(
+    storySpecification.relativeSceneRoot,
+  );
+  const initialScene = await sceneReader.getResource(
+    storySpecification.initialSceneIndicator,
+  );
+  return {
+    storySpecification,
+    stateSessionTracker: new StateSessionTracker<StoryState<Sc, U>>(
+      encapsulateStoryReducer<Sc, U>(
+        initialScene,
+        identity,
+        storySpecification.initialUserState,
+      ),
+    ),
+  };
 }
 
 function getReaderForContext<T>(

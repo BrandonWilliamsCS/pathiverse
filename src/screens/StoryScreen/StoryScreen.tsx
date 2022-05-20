@@ -1,12 +1,14 @@
-import { useDependencies } from "lib/unobtrusive-di-container/react";
+import {
+  DependencyProvider,
+  useDependencies,
+} from "lib/unobtrusive-di-container/react";
 import React from "react";
 
 import { DependencyMap, StoryDependencyMap } from "host/DependencyMap";
-import { StoryDependencyProvider } from "host/StoryDependencyProvider";
+import { Session } from "host/Session";
 import { Scene } from "kernel/Scene";
 import { ResourceIndicator } from "system/resource/ResourceIndicator";
-import { StorySpecification } from "system/StorySpecification";
-import { StoryViewer } from "./StoryViewer";
+import { SessionViewer } from "./SessionViewer";
 
 export interface StoryScreenProps {
   storyIndicator: ResourceIndicator;
@@ -16,22 +18,25 @@ export function StoryScreen<Sc extends Scene, U>({
   storyIndicator,
 }: StoryScreenProps) {
   const getDependencies = useDependencies<DependencyMap<Sc, U>>();
-  const storyReader = getDependencies("storyReader");
+  const sessionGenerator = getDependencies("initialSessionGenerator");
   const registerStoryDependencies = getDependencies(
     "registerStoryDependencies",
   );
-  const [storySpec, setStorySpec] = React.useState<StorySpecification<U>>();
+  const [session, setSession] = React.useState<Session<Sc, U>>();
   React.useEffect(() => {
-    storyReader.getResource(storyIndicator).then(setStorySpec);
-  }, [storyReader, storyIndicator]);
-  return storySpec ? (
-    <StoryDependencyProvider<Sc, U, StoryDependencyMap<Sc, U>>
-      storySpec={storySpec}
-      registerStoryDependencies={registerStoryDependencies}
+    sessionGenerator(storyIndicator).then(setSession);
+  }, [sessionGenerator, storyIndicator]);
+  return session ? (
+    <DependencyProvider<StoryDependencyMap<Sc, U>>
+      key={session.storySpecification.id}
+      registerDependencies={(registrar) => {
+        registrar.registerInstance("currentStory", session.storySpecification);
+        registerStoryDependencies(registrar);
+      }}
     >
-      <StoryViewer storySpec={storySpec} />
-    </StoryDependencyProvider>
+      <SessionViewer session={session} />
+    </DependencyProvider>
   ) : (
-    <></>
+    <>Loading Story...</>
   );
 }
