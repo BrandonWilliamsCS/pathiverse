@@ -22,8 +22,14 @@ export class StateSessionTracker<S> {
     this.stateCapsuleSubject = new BehaviorSubject(initialStateCapsule);
   }
 
-  public applyAction(action: Action): void {
-    const [, actionApplier] = this.stateCapsuleSubject.value;
+  public applyAction(action: Action): void;
+  public applyAction(action: Action, targetState: S): void;
+  public applyAction(action: Action, targetState?: S): void {
+    const [currentState, actionApplier] = this.stateCapsuleSubject.value;
+    // Allow (optional) guard against stale actions
+    if (arguments.length > 1 && currentState !== targetState) {
+      return;
+    }
     const newCapsule = actionApplier(action);
     this.stateCapsuleSubject.next(newCapsule);
   }

@@ -12,12 +12,12 @@ export function buildResolveSceneBeforeAdvanceActionTransformer<
 >(sceneReader: ResourceReader<Sc>): ActionTransformer {
   return async (action) => {
     if (!isResolveAndAdvanceSceneAction(action)) {
-      return await action;
+      return action;
     }
     const scene = await sceneReader.getResource(action.sceneIndicator);
-    return (await {
+    return {
       type: advanceSceneActionType,
       scene,
-    }) as AdvanceSceneAction<Sc>;
+    } as AdvanceSceneAction<Sc>;
   };
 }
