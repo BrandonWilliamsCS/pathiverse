@@ -1,0 +1,35 @@
+{
+  "type": "pathiverse.scene.contentWithResponse",
+  "name": "Kitchen",
+  "content": {
+    "type": "pathiverse.content.text/plain",
+    "value": "You're in a kitchen. There's a rickety door leading to the basement and a hallway back to the foyer."
+  },
+  "responsePrompt": "Where to now?",
+  "responseOptions": [
+    {
+      "type": "pathiverse.interactionOption.action",
+      "label": "Into the basement",
+      "action": {
+        "type": "pathiverse.action.resolveAndAdvanceScene",
+        "sceneIndicator": {
+          "type": "relativePath",
+          "requiresContext": true,
+          "value": "/basement.json"
+        }
+      }
+    },
+    {
+      "type": "pathiverse.interactionOption.action",
+      "label": "Down the hall",
+      "action": {
+        "type": "pathiverse.action.resolveAndAdvanceScene",
+        "sceneIndicator": {
+          "type": "relativePath",
+          "requiresContext": true,
+          "value": "/foyer.json"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "type": "pathiverse.scene.contentWithResponse",
+  "name": "Foyer",
+  "content": {
+    "type": "pathiverse.content.text/plain",
+    "value": "You're in the house foyer, with stairs going up and a hallway branching off."
+  },
+  "responsePrompt": "Where to now?",
+  "responseOptions": [
+    {
+      "type": "pathiverse.interactionOption.action",
+      "label": "Down the hall",
+      "action": {
+        "type": "pathiverse.action.resolveAndAdvanceScene",
+        "sceneIndicator": {
+          "type": "relativePath",
+          "requiresContext": true,
+          "value": "/kitchen.json"
+        }
+      }
+    },
+    {
+      "type": "pathiverse.interactionOption.action",
+      "label": "Upstairs",
+      "action": {
+        "type": "pathiverse.action.resolveAndAdvanceScene",
+        "sceneIndicator": {
+          "type": "relativePath",
+          "requiresContext": true,
+          "value": "/upstairs.json"
+        }
+      }
+    }
+  ]
+}

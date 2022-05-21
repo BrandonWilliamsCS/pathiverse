@@ -1,0 +1,10 @@
+{
+  "type": "pathiverse.scene.contentWithResponse",
+  "name": "Basement",
+  "content": {
+    "type": "pathiverse.content.text/plain",
+    "value": "The stairs creak as you make your way into the basement. You step into the darkness to tug on the string that controls the lights, but are eaten by a grue."
+  },
+  "responsePrompt": "The End.",
+  "responseOptions": []
+}

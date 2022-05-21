@@ -4,6 +4,7 @@ import React from "react";
 import { DependencyMap } from "host/DependencyMap";
 import { Scene } from "kernel/Scene";
 import { StorySpecification } from "system/StorySpecification";
+import { StoryListViewer } from "./StoryListViewer";
 
 export function StorySelectionScreen<Sc extends Scene, U>() {
   const storyListSource =
@@ -13,7 +14,7 @@ export function StorySelectionScreen<Sc extends Scene, U>() {
     storyListSource().then(setStoryList);
   }, [storyListSource]);
   return storyList ? (
-    <>Found {storyList.length} Stories.</>
+    <StoryListViewer storyList={storyList} />
   ) : (
     <>Loading Story List...</>
   );
