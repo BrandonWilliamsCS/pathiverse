@@ -7,9 +7,9 @@ import {
 } from "./ActionInteractionOption";
 import { ActionInteractionOptionDisplay } from "./ActionInteractionOptionDisplay";
 
-export const actionInteractionOptionRenderer: InterfaceElementRenderer = {
+export const actionInteractionOptionRenderer: InterfaceElementRenderer<any> = {
   canRender: isActionInteractionOption,
-  render: (interfaceElement, actionHandler) => (
+  render: ({ interfaceElement, actionHandler }) => (
     <ActionInteractionOptionDisplay
       interactionOption={interfaceElement as ActionInteractionOption}
       actionHandler={actionHandler}

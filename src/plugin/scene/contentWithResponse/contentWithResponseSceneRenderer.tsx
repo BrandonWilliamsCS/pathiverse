@@ -7,11 +7,17 @@ import {
 } from "./ContentWithResponseScene";
 import { ContentWithResponseStage } from "./ContentWithResponseStage";
 
-export const contentWithResponseSceneRenderer: InterfaceElementRenderer = {
+export const contentWithResponseSceneRenderer: InterfaceElementRenderer<any> = {
   canRender: isContentWithResponseScene,
-  render: (scene, actionHandler, interfaceElementRenderer) => (
-    <ContentWithResponseStage
-      scene={scene as ContentWithResponseScene}
+  render: ({
+    interfaceElement,
+    state,
+    actionHandler,
+    interfaceElementRenderer,
+  }) => (
+    <ContentWithResponseStage<any>
+      scene={interfaceElement as ContentWithResponseScene}
+      state={state}
       actionHandler={actionHandler}
       interfaceElementRenderer={interfaceElementRenderer}
     />

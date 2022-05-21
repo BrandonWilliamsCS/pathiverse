@@ -5,7 +5,7 @@ import { ActionInteractionOption } from "./ActionInteractionOption";
 
 export interface ActionInteractionOptionDisplayProps {
   interactionOption: ActionInteractionOption;
-  actionHandler: (action: Action) => Promise<void>;
+  actionHandler: (action: Action) => void;
 }
 
 /** Renders a button that applies the interaction option's action when clicked. */

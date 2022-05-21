@@ -1,18 +1,29 @@
+import { DependencyProvider } from "lib/unobtrusive-di-container/react";
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { HostedStateType, hostSetup } from "hostSetup";
-import { HostServicesBuilder } from "platform/react/HostServicesBuilder";
-import { ConsumptionScreen } from "screens/ConsumptionScreen/ConsumptionScreen";
-import { useFunctionInitRef } from "util/useFunctionInitRef";
+import { DependencyMap } from "host/DependencyMap";
+import {
+  registerDependencies,
+  HostedSceneType,
+  HostedUserStateType,
+} from "host/hostSetup";
+import { StoryScreen } from "screens/StoryScreen/StoryScreen";
+import { StorySelectionScreen } from "screens/StorySelectionScreen/StorySelectionScreen";
 
 function App() {
-  const hostServices = useFunctionInitRef(() => {
-    const builder = new HostServicesBuilder<HostedStateType>();
-    hostSetup(builder);
-    return builder.build();
-  }).current;
-
-  return <ConsumptionScreen hostServices={hostServices} />;
+  return (
+    <DependencyProvider<DependencyMap<HostedSceneType, HostedUserStateType>>
+      registerDependencies={registerDependencies}
+    >
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<StorySelectionScreen />} />
+          <Route path="/story/:storyId" element={<StoryScreen />} />
+        </Routes>
+      </BrowserRouter>
+    </DependencyProvider>
+  );
 }
 
 export default App;

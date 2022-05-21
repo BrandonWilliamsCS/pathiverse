@@ -2,13 +2,12 @@ import { BehaviorSubject, map, Observable } from "rxjs";
 
 import { Action } from "kernel/Action";
 import { StateCapsule } from "kernel/state/StateCapsule";
-import { ActionMiddleware } from "./ActionMiddleware";
 
 /**
  * Maintains a single session of state as actions are applied to an initial `StateCapsule`.
  * @typeParam S - Represents the state values possible during this session
  */
-export class StorySession<S> {
+export class StateSessionTracker<S> {
   private readonly stateCapsuleSubject: BehaviorSubject<StateCapsule<S>>;
 
   public get currentState(): S {
@@ -19,19 +18,19 @@ export class StorySession<S> {
     return this.stateCapsuleSubject.pipe(map(([state]) => state));
   }
 
-  public constructor(
-    initialStateCapsule: StateCapsule<S>,
-    private readonly actionMiddleware?: ActionMiddleware<S>,
-  ) {
+  public constructor(initialStateCapsule: StateCapsule<S>) {
     this.stateCapsuleSubject = new BehaviorSubject(initialStateCapsule);
   }
 
-  public async applyAction(action: Action) {
-    const [, baseActionApplier] = this.stateCapsuleSubject.value;
-    const actionApplier = this.actionMiddleware
-      ? (action: Action) => this.actionMiddleware!(action, baseActionApplier)
-      : baseActionApplier;
-    const newCapsule = await actionApplier(action);
+  public applyAction(action: Action): void;
+  public applyAction(action: Action, targetState: S): void;
+  public applyAction(action: Action, targetState?: S): void {
+    const [currentState, actionApplier] = this.stateCapsuleSubject.value;
+    // Allow (optional) guard against stale actions
+    if (arguments.length > 1 && currentState !== targetState) {
+      return;
+    }
+    const newCapsule = actionApplier(action);
     this.stateCapsuleSubject.next(newCapsule);
   }
 }

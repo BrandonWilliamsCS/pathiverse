@@ -1,0 +1,23 @@
+{
+  "type": "pathiverse.scene.contentWithResponse",
+  "name": "Upstairs",
+  "content": {
+    "type": "pathiverse.content.text/plain",
+    "value": "You've hit the top of the stairs, but every door is locked."
+  },
+  "responsePrompt": "Where to now?",
+  "responseOptions": [
+    {
+      "type": "pathiverse.interactionOption.action",
+      "label": "Back downstairs",
+      "action": {
+        "type": "pathiverse.action.resolveAndAdvanceScene",
+        "sceneIndicator": {
+          "type": "relativePath",
+          "requiresContext": true,
+          "value": "/foyer.json"
+        }
+      }
+    }
+  ]
+}

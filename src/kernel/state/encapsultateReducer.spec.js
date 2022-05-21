@@ -1,7 +1,7 @@
 import { encapsulateReducer } from "./encapsulateReducer";
 
 describe("encapsulateReducer", () => {
-  it("Returns the initial state in the first state capsule", async () => {
+  it("Returns the initial state in the first state capsule", () => {
     // Arrange
     const reducer = (prevState, action) => prevState + action;
 
@@ -12,13 +12,13 @@ describe("encapsulateReducer", () => {
     expect(firstState).toBe(0);
   });
 
-  it("Returns a reduced state in the state capsule produced by action application", async () => {
+  it("Returns a reduced state in the state capsule produced by action application", () => {
     // Arrange
     const reducer = (prevState, action) => prevState + action;
 
     // Act
     const [, firstApplier] = encapsulateReducer(reducer, 0);
-    const [reducedState] = await firstApplier(1);
+    const [reducedState] = firstApplier(1);
 
     // Assert
     expect(reducedState).toBe(1);
