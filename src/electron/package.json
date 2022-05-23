@@ -1,0 +1,26 @@
+{
+  "name": "pathiverse-electron",
+  "version": "0.1.0",
+  "private": true,
+  "author": "BrandonWilliamsCS@gmail.com",
+  "description": "Simple Electron shell for local Pathiverse usage",
+  "main": "main.js",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/node": "^16.11.36",
+    "electron": "^18.2.4",
+    "electron-builder": "^22.4.1",
+    "electron-webpack": "^2.8.2",
+    "typescript": "^4.6.4",
+    "webpack": "~4.42.1"
+  },
+  "scripts": {
+    "start": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist": "npm run compile; electron-builder",
+    "dist:dir": "npm run dist --dir -c.compression=store -c.mac.identity=null"
+  }
+}
