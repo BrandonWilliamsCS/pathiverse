@@ -23,7 +23,7 @@
     "build": "npm run build:main && npm run build:renderer",
     "build:main": "electron-webpack",
     "build:renderer": "npm run build:renderer:copy && npm run build:renderer:html",
-    "build:renderer:copy": "xcopy ..\\..\\build dist\\renderer /i /y /s",
+    "build:renderer:copy": "xcopy ..\\build dist\\renderer /i /y /s",
     "build:renderer:html": "node ./transformHtml.js",
     "dist": "electron-builder",
     "dist:dir": "npm run dist --dir -c.compression=store -c.mac.identity=null",
