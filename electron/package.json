@@ -1,0 +1,37 @@
+{
+  "name": "pathiverse-electron",
+  "version": "0.1.0",
+  "private": true,
+  "author": "BrandonWilliamsCS@gmail.com",
+  "description": "Simple Electron shell for local Pathiverse usage",
+  "main": "main.js",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "source-map-support": "^0.5.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/node": "^16.11.36",
+    "electron": "^18.2.4",
+    "electron-builder": "^22.4.1",
+    "electron-webpack": "^2.8.2",
+    "replace": "^1.2.1",
+    "typescript": "^4.6.4",
+    "webpack": "~4.42.1"
+  },
+  "scripts": {
+    "build": "npm run build:main && npm run build:renderer",
+    "build:main": "electron-webpack",
+    "build:renderer": "npm run build:renderer:copy && npm run build:renderer:html",
+    "build:renderer:copy": "xcopy ..\\build dist\\renderer /i /y /s",
+    "build:renderer:html": "node ./transformHtml.js",
+    "dist": "electron-builder",
+    "dist:dir": "npm run dist --dir -c.compression=store -c.mac.identity=null",
+    "all": "npm run build && npm run dist"
+  },
+  "electronWebpack": {
+    "renderer": {
+      "sourceDirectory": null
+    }
+  }
+}
