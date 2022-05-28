@@ -6,6 +6,7 @@
   "description": "Simple Electron shell for local Pathiverse usage",
   "main": "main.js",
   "dependencies": {
+    "express": "^4.18.1",
     "lodash": "^4.17.21",
     "source-map-support": "^0.5.21"
   },
@@ -31,6 +32,9 @@
     "all": "npm run build && npm run dist"
   },
   "electronWebpack": {
+    "main": {
+      "webpackConfig": "main.webpack.js"
+    },
     "renderer": {
       "sourceDirectory": null
     }
