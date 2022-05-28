@@ -20,6 +20,7 @@
     "webpack": "~4.42.1"
   },
   "scripts": {
+    "check-asar": "asar l dist/win-unpacked/resources/app.asar",
     "build": "npm run build:main && npm run build:renderer",
     "build:main": "electron-webpack",
     "build:renderer": "npm run build:renderer:copy && npm run build:renderer:html",
