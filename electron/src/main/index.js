@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from "electron";
+import path from "path";
 import startServer from "pathiverse-server";
 import { URL } from "url";
 
@@ -54,6 +55,9 @@ app.on("activate", () => {
 app.on("ready", () => {
   // Serve static files from the app source dir.
   // Technically this allows you to access main process files too, but it's all on the local FS anyway.
-  startServer(__dirname, serverPort);
+  const staticDir = __dirname;
+  // Use a subdir of the user's data dir for storing/accessing api data
+  const apiAccessRoot = path.join(app.getPath("userData"), "/pathiverse");
+  startServer(staticDir, apiAccessRoot, serverPort);
   mainWindow = createMainWindow();
 });

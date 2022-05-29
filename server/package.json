@@ -7,7 +7,7 @@
     "lodash": "^4.17.21"
   },
   "scripts": {
-    "start": "node cli.js ../build"
+    "start": "node cli.js ../build D:/Users/Brandon/AppData/Roaming/pathiverse-electron/pathiverse"
   },
   "eslintConfig": {
     "extends": "react-app"
