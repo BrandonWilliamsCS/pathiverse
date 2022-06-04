@@ -2,8 +2,13 @@
   "type": "pathiverse.scene.contentWithResponse",
   "name": "Up To Bat",
   "content": {
-    "type": "pathiverse.content.text/plain",
-    "value": "You step up to the plate, swing at the pitch, and..."
+    "type": "pathiverse.content.indicated",
+    "directContentType": "pathiverse.content.text/plain",
+    "indicator": {
+      "type": "relativePath",
+      "requiresContext": true,
+      "value": "upToBat.md"
+    }
   },
   "responsePrompt": "How does it go?",
   "responseOptions": [

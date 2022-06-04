@@ -21,7 +21,21 @@ async function getScene(apiAccessRoot, storyId, scenePath) {
   return await getJsonContents(fullScenePath);
 }
 
-module.exports = { getStoryList, getStorySpec, getScene };
+async function getContent(apiAccessRoot, storyId, contentPath) {
+  const storySpec = await getStorySpec(apiAccessRoot, storyId);
+  const fullContentPath = resolveScenePath(
+    apiAccessRoot,
+    storySpec.relativeSceneRoot,
+    contentPath,
+  );
+  return await getRawContents(fullContentPath);
+}
+
+module.exports = { getContent, getStoryList, getStorySpec, getScene };
+
+async function getRawContents(path) {
+  return fs.readFile(path, { encoding: "utf8" });
+}
 
 async function getJsonContents(path) {
   const fileContents = await fs.readFile(path, { encoding: "utf8" });

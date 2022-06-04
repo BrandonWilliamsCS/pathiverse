@@ -1,6 +1,7 @@
 import { DependencyRegistrar } from "lib/unobtrusive-di-container";
 
 import { Scene } from "kernel/Scene";
+import { DependencyMap as IndicatedContentDependencyMap } from "plugin/content/indicated/DependencyMap";
 import { DependencyMap as PlatformDependencyMap } from "platform/react/DependencyMap";
 import { DependencyMap as SceneRendererDependencyMap } from "plugin/scene/contentWithResponse/DependencyMap";
 import { ResourceIndicator } from "system/resource/ResourceIndicator";
@@ -17,7 +18,8 @@ export interface DependencyMap<Sc extends Scene, U>
 }
 
 export interface StoryDependencyMap<Sc extends Scene, U>
-  extends SceneRendererDependencyMap {
+  extends SceneRendererDependencyMap,
+    IndicatedContentDependencyMap {
   currentStory: StorySpecification<U>;
   sceneReader: (indicator: ResourceIndicator) => Promise<Sc>;
 }

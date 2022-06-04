@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { getStoryList, getScene } = require("./access");
+const { getContent, getStoryList, getScene } = require("./access");
 
 function startServer(staticDir, apiAccessRoot, port) {
   const server = express();
@@ -30,8 +30,16 @@ function buildApiRouter(apiAccessRoot) {
   apiRouter.get("/story/:storyId/scene/*", async (req, res) => {
     const storyId = req.params.storyId;
     const scenePath = req.params[0];
-    const storySpec = await getScene(apiAccessRoot, storyId, scenePath);
-    res.json(storySpec);
+    const scene = await getScene(apiAccessRoot, storyId, scenePath);
+    res.json(scene);
+  });
+  // Content, also based on story url
+  apiRouter.get("/story/:storyId/content/*", async (req, res) => {
+    const storyId = req.params.storyId;
+    const contentPath = req.params[0];
+    const content = await getContent(apiAccessRoot, storyId, contentPath);
+    res.type("text/plain");
+    res.send(content);
   });
   // Ensure that all other api urls are 404s.
   apiRouter.get("*", function (req, res) {

@@ -5,6 +5,7 @@ import { Scene } from "kernel/Scene";
 import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
 import { buildCompositeInterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
+import { indicatedContentRenderer } from "plugin/content/indicated/indicatedContentRenderer";
 import { plainTextContentRenderer } from "plugin/content/plainText/plainTextContentRenderer";
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
@@ -14,6 +15,7 @@ import { ResourceIndicator } from "system/resource/ResourceIndicator";
 import { StateSessionTracker } from "system/StateSessionTracker";
 import { StorySpecification } from "system/StorySpecification";
 import { getJsonResource } from "util/getJsonResource";
+import { getRawResource } from "util/getRawResource";
 import { DependencyMap, StoryDependencyMap } from "./DependencyMap";
 
 export type HostedSceneType = ContentWithResponseScene;
@@ -28,6 +30,7 @@ export function registerDependencies(
     "interfaceElementRenderer",
     buildCompositeInterfaceElementRenderer([
       contentWithResponseSceneRenderer,
+      indicatedContentRenderer,
       plainTextContentRenderer,
       actionInteractionOptionRenderer,
     ]),
@@ -48,6 +51,10 @@ export function registerStoryDependencies(
   registrar.registerFactory("sceneReader", (registry) => {
     const currentStory = registry.resolveDependency("currentStory");
     return (indicator) => getScene(currentStory, indicator);
+  });
+  registrar.registerFactory("indicatedContentReader", (registry) => {
+    const currentStory = registry.resolveDependency("currentStory");
+    return (indicator) => getSceneContent(currentStory, indicator);
   });
   registrar.registerFactory("actionTransformer", (registry) =>
     buildResolveSceneBeforeAdvanceActionTransformer(
@@ -90,6 +97,15 @@ function getScene<Sc>(
 ) {
   return getJsonResource<Sc>(
     joinPaths(["/api/story", storySpec.id, "/scene", sceneIndicator.value]),
+  );
+}
+
+function getSceneContent(
+  storySpec: StorySpecification<any>,
+  contentIndicator: ResourceIndicator,
+) {
+  return getRawResource(
+    joinPaths(["/api/story", storySpec.id, "/content", contentIndicator.value]),
   );
 }
 
