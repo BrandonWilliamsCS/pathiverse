@@ -81,7 +81,7 @@ async function generateInitialSession<Sc extends Scene, U>(storyId: string) {
 }
 
 function getStoryList<U>() {
-  return getJsonResource<StorySpecification<U>[]>("/api/story");
+  return getJsonResource<StorySpecification<U>[]>("/api/story/list.json");
 }
 
 function getScene<Sc>(

@@ -22,7 +22,7 @@ module.exports = startServer;
 function buildApiRouter(apiAccessRoot) {
   const apiRouter = express.Router();
   // Story list
-  apiRouter.get("/story", async (req, res) => {
+  apiRouter.get("/story/list.json", async (req, res) => {
     const storySpec = await getStoryList(apiAccessRoot);
     res.json(storySpec);
   });
