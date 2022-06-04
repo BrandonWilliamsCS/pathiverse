@@ -1,8 +1,10 @@
 import { app, BrowserWindow } from "electron";
-import * as path from "path";
+import path from "path";
+import startServer from "pathiverse-server";
 import { URL } from "url";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+const serverPort = 3001;
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow;
@@ -16,8 +18,8 @@ function createMainWindow() {
     window.webContents.openDevTools();
   }
 
-  const targetUrl = new URL(path.join(__dirname, "index.html"));
-  targetUrl.protocol = "file";
+  const targetUrl = new URL("http://localhost");
+  targetUrl.port = serverPort;
   window.loadURL(targetUrl.toString());
 
   window.on("closed", () => {
@@ -51,5 +53,11 @@ app.on("activate", () => {
 
 // create main BrowserWindow when electron is ready
 app.on("ready", () => {
+  // Serve static files from the app source dir.
+  // Technically this allows you to access main process files too, but it's all on the local FS anyway.
+  const staticDir = __dirname;
+  // Use a subdir of the user's data dir for storing/accessing api data
+  const apiAccessRoot = path.join(app.getPath("userData"), "/pathiverse");
+  startServer(staticDir, apiAccessRoot, serverPort);
   mainWindow = createMainWindow();
 });
