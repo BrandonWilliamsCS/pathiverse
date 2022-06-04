@@ -2,8 +2,13 @@
   "type": "pathiverse.scene.contentWithResponse",
   "name": "Home Run!",
   "content": {
-    "type": "pathiverse.content.text/plain",
-    "value": "With a crack, the ball goes flying into the crowd. You win!"
+    "type": "pathiverse.content.indicated",
+    "directContentType": "pathiverse.content.text/plain",
+    "indicator": {
+      "type": "relativePath",
+      "requiresContext": true,
+      "value": "homeRun.md"
+    }
   },
   "responseOptions": []
 }
