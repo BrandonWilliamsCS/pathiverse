@@ -11,7 +11,6 @@ import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/Conte
 import { contentWithResponseSceneRenderer } from "plugin/scene/contentWithResponse/contentWithResponseSceneRenderer";
 import { buildResolveSceneBeforeAdvanceActionTransformer } from "system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionTransformer";
 import { ResourceIndicator } from "system/resource/ResourceIndicator";
-import { ResourceReader } from "system/resource/ResourceReader";
 import { StateSessionTracker } from "system/StateSessionTracker";
 import { StorySpecification } from "system/StorySpecification";
 import { getJsonResource } from "util/getJsonResource";
@@ -33,7 +32,7 @@ export function registerDependencies(
       actionInteractionOptionRenderer,
     ]),
   );
-  registrar.registerInstance("storyListSource", storyListSource);
+  registrar.registerInstance("storyListSource", getStoryList);
   registrar.registerInstance("initialSessionGenerator", generateInitialSession);
   registrar.registerInstance(
     "registerStoryDependencies",
@@ -48,9 +47,7 @@ export function registerStoryDependencies(
 ) {
   registrar.registerFactory("sceneReader", (registry) => {
     const currentStory = registry.resolveDependency("currentStory");
-    return getReaderForContext<ContentWithResponseScene>(
-      currentStory.relativeSceneRoot,
-    );
+    return (indicator) => getScene(currentStory, indicator);
   });
   registrar.registerFactory("actionTransformer", (registry) =>
     buildResolveSceneBeforeAdvanceActionTransformer(
@@ -60,17 +57,15 @@ export function registerStoryDependencies(
 }
 
 async function generateInitialSession<Sc extends Scene, U>(storyId: string) {
-  const storyList = await storyListSource<U>();
+  const storyList = await getStoryList<U>();
   const storySpecification = storyList.find(
     (storySpec) => storySpec.id === storyId,
   );
   if (!storySpecification) {
     throw new Error(`Cannot find story with id ${storyId}`);
   }
-  const sceneReader = getReaderForContext<Sc>(
-    storySpecification.relativeSceneRoot,
-  );
-  const initialScene = await sceneReader.getResource(
+  const initialScene = await getScene<Sc>(
+    storySpecification,
     storySpecification.initialSceneIndicator,
   );
   return {
@@ -85,42 +80,17 @@ async function generateInitialSession<Sc extends Scene, U>(storyId: string) {
   };
 }
 
-function getReaderForContext<T>(
-  contextIndicator?: ResourceIndicator,
-): ResourceReader<T> {
-  if (contextIndicator?.requiresContext) {
-    throw new Error("Cannot use context that requires other context");
-  }
-  return {
-    getResource: async (resourceIndicator) => {
-      let mergedIndicator = resourceIndicator;
-      if (resourceIndicator.requiresContext) {
-        if (!contextIndicator) {
-          throw new Error(
-            "Missing context for resourceIndicator that requires it",
-          );
-        }
-        mergedIndicator = mergeResourceIndicators(
-          contextIndicator,
-          resourceIndicator,
-        );
-      }
-      return await getJsonResource<T>(mergedIndicator.value);
-    },
-  };
+function getStoryList<U>() {
+  return getJsonResource<StorySpecification<U>[]>("/api/story");
 }
 
-function mergeResourceIndicators(
-  contextIndicator: ResourceIndicator,
-  resourceIndicator: ResourceIndicator,
-): ResourceIndicator {
-  if (!resourceIndicator.requiresContext) {
-    return resourceIndicator;
-  }
-  return {
-    ...contextIndicator,
-    value: joinPaths([contextIndicator.value, resourceIndicator.value]),
-  };
+function getScene<Sc>(
+  storySpec: StorySpecification<any>,
+  sceneIndicator: ResourceIndicator,
+) {
+  return getJsonResource<Sc>(
+    joinPaths(["/api/story", storySpec.id, "/scene", sceneIndicator.value]),
+  );
 }
 
 function joinPaths(parts: string[]) {
@@ -138,10 +108,3 @@ function joinPaths(parts: string[]) {
   });
   return parts.join(separator);
 }
-
-const storyListSource = <U,>() =>
-  getReaderForContext<StorySpecification<U>[]>().getResource({
-    type: "httpUrl",
-    requiresContext: false,
-    value: "/sample/storyList.json",
-  });
