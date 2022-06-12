@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Action } from "kernel/Action";
-import { InterfaceElement } from "system/InterfaceElement";
+import { Action } from "pathiverse/kernel/Action";
+import { InterfaceElement } from "pathiverse/system/InterfaceElement";
 
 export interface InterfaceElementRenderArgs<S> {
   interfaceElement: InterfaceElement;

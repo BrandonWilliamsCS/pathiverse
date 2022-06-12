@@ -2,8 +2,8 @@ import { useDependencies } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
 import { DependencyMap } from "host/DependencyMap";
-import { Scene } from "kernel/Scene";
-import { StorySpecification } from "system/StorySpecification";
+import { Scene } from "pathiverse/kernel/Scene";
+import { StorySpecification } from "pathiverse/system/StorySpecification";
 import { StoryListViewer } from "./StoryListViewer";
 
 export function StorySelectionScreen<Sc extends Scene, U>() {

@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 import { DependencyMap, StoryDependencyMap } from "host/DependencyMap";
 import { Session } from "host/Session";
-import { Scene } from "kernel/Scene";
+import { Scene } from "pathiverse/kernel/Scene";
 import { SessionViewer } from "./SessionViewer";
 
 export function StoryScreen<Sc extends Scene, U>() {

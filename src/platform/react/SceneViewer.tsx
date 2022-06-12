@@ -1,9 +1,9 @@
 import { useDependencies } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
-import { Action } from "kernel/Action";
-import { Scene } from "kernel/Scene";
-import { StoryState } from "kernel/story/StoryState";
+import { Action } from "pathiverse/kernel/Action";
+import { Scene } from "pathiverse/kernel/Scene";
+import { StoryState } from "pathiverse/kernel/story/StoryState";
 import { DependencyMap } from "./DependencyMap";
 
 export interface SceneViewerProps<Sc extends Scene, U> {

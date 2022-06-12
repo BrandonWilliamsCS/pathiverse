@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Session } from "host/Session";
-import { Scene } from "kernel/Scene";
+import { Scene } from "pathiverse/kernel/Scene";
 import { StateSessionTrackerViewer } from "platform/react/StateSessionTrackerViewer";
 
 export interface SessionViewerProps<Sc extends Scene, U> {

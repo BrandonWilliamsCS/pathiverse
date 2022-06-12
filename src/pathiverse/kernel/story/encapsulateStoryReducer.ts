@@ -1,5 +1,5 @@
-import { Action } from "kernel/Action";
-import { Scene } from "kernel/Scene";
+import { Action } from "../Action";
+import { Scene } from "../Scene";
 import { encapsulateReducer } from "../state/encapsulateReducer";
 import { StateCapsule } from "../state/StateCapsule";
 import { StateReducer } from "../state/StateReducer";

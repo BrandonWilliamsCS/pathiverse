@@ -1,4 +1,4 @@
-import { Action } from "kernel/Action";
+import { Action } from "../Action";
 import { StateCapsule } from "./StateCapsule";
 
 /**

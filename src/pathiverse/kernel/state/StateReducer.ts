@@ -1,4 +1,4 @@
-import { Action } from "kernel/Action";
+import { Action } from "../Action";
 
 /**
  * Applies an action to an initial state to produce a new state.

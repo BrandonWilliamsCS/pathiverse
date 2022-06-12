@@ -1,9 +1,13 @@
 import { DependencyRegistrar } from "lib/unobtrusive-di-container";
 import { identity } from "lodash";
 
-import { Scene } from "kernel/Scene";
-import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
-import { StoryState } from "kernel/story/StoryState";
+import { Scene } from "pathiverse/kernel/Scene";
+import { encapsulateStoryReducer } from "pathiverse/kernel/story/encapsulateStoryReducer";
+import { StoryState } from "pathiverse/kernel/story/StoryState";
+import { buildResolveSceneBeforeAdvanceActionTransformer } from "pathiverse/system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionTransformer";
+import { ResourceIndicator } from "pathiverse/system/resource/ResourceIndicator";
+import { StateSessionTracker } from "pathiverse/system/StateSessionTracker";
+import { StorySpecification } from "pathiverse/system/StorySpecification";
 import { buildCompositeInterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { indicatedContentRenderer } from "plugin/content/indicated/indicatedContentRenderer";
 import { markdownContentRenderer } from "plugin/content/markdown/markdownContentRenderer";
@@ -11,10 +15,6 @@ import { plainTextContentRenderer } from "plugin/content/plainText/plainTextCont
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
 import { contentWithResponseSceneRenderer } from "plugin/scene/contentWithResponse/contentWithResponseSceneRenderer";
-import { buildResolveSceneBeforeAdvanceActionTransformer } from "system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionTransformer";
-import { ResourceIndicator } from "system/resource/ResourceIndicator";
-import { StateSessionTracker } from "system/StateSessionTracker";
-import { StorySpecification } from "system/StorySpecification";
 import { getJsonResource } from "util/getJsonResource";
 import { getRawResource } from "util/getRawResource";
 import { DependencyMap, StoryDependencyMap } from "./DependencyMap";

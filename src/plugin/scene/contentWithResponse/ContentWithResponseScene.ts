@@ -1,5 +1,5 @@
-import { Scene } from "kernel/Scene";
-import { InterfaceElement } from "system/InterfaceElement";
+import { Scene } from "pathiverse/kernel/Scene";
+import { InterfaceElement } from "pathiverse/system/InterfaceElement";
 
 /** Describes a scene that presents content along with a list of options for response interactions */
 export const contentWithResponseSceneType =

@@ -1,11 +1,11 @@
 import { DependencyRegistrar } from "lib/unobtrusive-di-container";
 
-import { Scene } from "kernel/Scene";
+import { Scene } from "pathiverse/kernel/Scene";
+import { ResourceIndicator } from "pathiverse/system/resource/ResourceIndicator";
+import { StorySpecification } from "pathiverse/system/StorySpecification";
 import { DependencyMap as IndicatedContentDependencyMap } from "plugin/content/indicated/DependencyMap";
 import { DependencyMap as PlatformDependencyMap } from "platform/react/DependencyMap";
 import { DependencyMap as SceneRendererDependencyMap } from "plugin/scene/contentWithResponse/DependencyMap";
-import { ResourceIndicator } from "system/resource/ResourceIndicator";
-import { StorySpecification } from "system/StorySpecification";
 import { Session } from "./Session";
 
 export interface DependencyMap<Sc extends Scene, U>

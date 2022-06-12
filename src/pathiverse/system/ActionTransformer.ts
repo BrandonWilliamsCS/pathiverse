@@ -1,4 +1,4 @@
-import { Action } from "kernel/Action";
+import { Action } from "../kernel/Action";
 
 export type ActionTransformer = (action: Action) => Promise<Action>;
 

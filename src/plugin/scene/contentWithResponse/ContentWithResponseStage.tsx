@@ -1,7 +1,7 @@
 import { useDependencies } from "lib/unobtrusive-di-container/react";
 import React from "react";
 
-import { Action } from "kernel/Action";
+import { Action } from "pathiverse/kernel/Action";
 import { InterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { ContentWithResponseScene } from "./ContentWithResponseScene";
 import { DependencyMap } from "./DependencyMap";

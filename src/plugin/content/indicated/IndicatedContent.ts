@@ -1,5 +1,5 @@
-import { InterfaceElement } from "system/InterfaceElement";
-import { ResourceIndicator } from "system/resource/ResourceIndicator";
+import { InterfaceElement } from "pathiverse/system/InterfaceElement";
+import { ResourceIndicator } from "pathiverse/system/resource/ResourceIndicator";
 
 /** Describes content that indirectly indicates actual content */
 export const indicatedContentType = "pathiverse.content.indicated" as const;

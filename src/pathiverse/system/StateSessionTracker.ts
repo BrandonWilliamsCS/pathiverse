@@ -1,7 +1,7 @@
 import { BehaviorSubject, map, Observable } from "rxjs";
 
-import { Action } from "kernel/Action";
-import { StateCapsule } from "kernel/state/StateCapsule";
+import { Action } from "../kernel/Action";
+import { StateCapsule } from "../kernel/state/StateCapsule";
 
 /**
  * Maintains a single session of state as actions are applied to an initial `StateCapsule`.

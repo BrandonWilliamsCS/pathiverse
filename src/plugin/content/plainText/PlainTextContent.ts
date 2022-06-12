@@ -1,4 +1,4 @@
-import { InterfaceElement } from "system/InterfaceElement";
+import { InterfaceElement } from "pathiverse/system/InterfaceElement";
 import { DirectContent } from "../DirectContent";
 
 /** Describes content that is of the "plain text" variety. */

@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Scene } from "kernel/Scene";
-import { StoryState } from "kernel/story/StoryState";
+import { Scene } from "pathiverse/kernel/Scene";
+import { StoryState } from "pathiverse/kernel/story/StoryState";
+import { StateSessionTracker } from "pathiverse/system/StateSessionTracker";
 import { SceneViewer } from "platform/react/SceneViewer";
 import { useStateSessionTrackerProjection } from "platform/react/useStateSessionTrackerProjection";
-import { StateSessionTracker } from "system/StateSessionTracker";
 
 export interface StateSessionTrackerViewerProps<Sc extends Scene, U> {
   stateSessionTracker: StateSessionTracker<StoryState<Sc, U>>;

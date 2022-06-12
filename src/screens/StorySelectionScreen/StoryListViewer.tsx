@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StorySpecification } from "system/StorySpecification";
+import { StorySpecification } from "pathiverse/system/StorySpecification";
 import { StorySpecLink } from "./StorySpecLink";
 
 export interface StoryListViewerProps {

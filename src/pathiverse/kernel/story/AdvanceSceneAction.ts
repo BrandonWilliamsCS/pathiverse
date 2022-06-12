@@ -1,4 +1,4 @@
-import { Action } from "kernel/Action";
+import { Action } from "../Action";
 import { Scene } from "../Scene";
 
 /** Describes an action that advances to a new scene */

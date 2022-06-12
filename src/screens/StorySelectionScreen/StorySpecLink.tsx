@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { StorySpecification } from "system/StorySpecification";
+import { StorySpecification } from "pathiverse/system/StorySpecification";
 
 export interface StorySpecLinkProps {
   storySpec: StorySpecification<any>;

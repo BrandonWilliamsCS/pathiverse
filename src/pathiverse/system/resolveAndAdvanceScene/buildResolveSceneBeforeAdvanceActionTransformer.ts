@@ -1,8 +1,8 @@
-import { Scene } from "kernel/Scene";
+import { Scene } from "../../kernel/Scene";
 import {
   AdvanceSceneAction,
   advanceSceneActionType,
-} from "kernel/story/AdvanceSceneAction";
+} from "../../kernel/story/AdvanceSceneAction";
 import { ActionTransformer } from "../ActionTransformer";
 import { ResourceIndicator } from "../resource/ResourceIndicator";
 import { isResolveAndAdvanceSceneAction } from "./ResolveAndAdvanceSceneAction";

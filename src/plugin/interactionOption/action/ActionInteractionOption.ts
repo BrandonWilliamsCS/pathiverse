@@ -1,5 +1,5 @@
-import { Action } from "kernel/Action";
-import { InterfaceElement } from "system/InterfaceElement";
+import { Action } from "pathiverse/kernel/Action";
+import { InterfaceElement } from "pathiverse/system/InterfaceElement";
 
 /** Describes an interaction option that represents a specific action */
 export const actionInteractionOptionType =

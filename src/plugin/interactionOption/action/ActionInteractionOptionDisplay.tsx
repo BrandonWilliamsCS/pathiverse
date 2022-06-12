@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Action } from "kernel/Action";
+import { Action } from "pathiverse/kernel/Action";
 import { ActionInteractionOption } from "./ActionInteractionOption";
 
 export interface ActionInteractionOptionDisplayProps {
