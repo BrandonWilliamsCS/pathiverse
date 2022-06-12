@@ -9,12 +9,3 @@ replace({
   recursive: false,
   silent: false,
 });
-
-// And make sure the content files are served relative
-replace({
-  regex: '"/static',
-  replacement: "\"./static",
-  paths: ["./dist/renderer/index.html"],
-  recursive: false,
-  silent: false,
-});
