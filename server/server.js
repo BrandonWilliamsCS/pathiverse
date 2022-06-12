@@ -11,7 +11,7 @@ function startServer(staticDir, apiAccessRoot, port) {
   // Since the app has path-based routing, any other URL may refer to the app.
   // Serve it and let its routing sort it out.
   server.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, `${staticDir}/index.html`));
+    res.sendFile(path.join(staticDir, "/index.html"));
   });
   server.listen(port, () => {
     console.log(`Pathiverse server listening on port ${port}`);
