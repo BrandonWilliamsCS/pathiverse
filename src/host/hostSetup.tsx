@@ -6,6 +6,7 @@ import { encapsulateStoryReducer } from "kernel/story/encapsulateStoryReducer";
 import { StoryState } from "kernel/story/StoryState";
 import { buildCompositeInterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
 import { indicatedContentRenderer } from "plugin/content/indicated/indicatedContentRenderer";
+import { markdownContentRenderer } from "plugin/content/markdown/markdownContentRenderer";
 import { plainTextContentRenderer } from "plugin/content/plainText/plainTextContentRenderer";
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
@@ -31,6 +32,7 @@ export function registerDependencies(
     buildCompositeInterfaceElementRenderer([
       contentWithResponseSceneRenderer,
       indicatedContentRenderer,
+      markdownContentRenderer,
       plainTextContentRenderer,
       actionInteractionOptionRenderer,
     ]),
