@@ -1,24 +1,23 @@
 import { BaseDependencyMap } from "../BaseDependencyMap";
+import { DependencyEntry } from "../DependencyEntry";
 import { DependencyRegistry } from "./DependencyRegistry";
 
 export class CombinedDependencyRegistry<
   T = BaseDependencyMap,
 > extends DependencyRegistry<T> {
-  public constructor(
-    public readonly childRegistries: DependencyRegistry<T>[],
-  ) {
+  public constructor(public readonly childRegistries: DependencyRegistry<T>[]) {
     super();
   }
 
-  public resolveDependencyStatus<K extends keyof T>(
+  public override getEntry<K extends keyof T>(
     key: K,
-  ): { present: boolean; value?: T[K] } {
+  ): DependencyEntry<T[K], T> | undefined {
     for (const childRegistry of this.childRegistries) {
-      const childStatus = childRegistry.resolveDependencyStatus(key);
-      if (childStatus.present) {
-        return childStatus;
+      const childEntry = childRegistry.getEntry(key);
+      if (childEntry) {
+        return childEntry;
       }
     }
-    return { present: false };
+    return undefined;
   }
 }

@@ -1,4 +1,5 @@
 import { BaseDependencyMap } from "../BaseDependencyMap";
+import { DependencyEntry } from "../DependencyEntry";
 import { RegistrationMap } from "../RegistrationMap";
 import { DependencyRegistry } from "./DependencyRegistry";
 
@@ -8,50 +9,25 @@ export class MappingDependencyRegistry<
 > extends DependencyRegistry<T> {
   public static readonly Empty = new MappingDependencyRegistry<{}>({});
 
-  private readonly resolvedDependencies = new Map<
+  private readonly entries = new Map<
     string | number | symbol,
-    unknown
+    DependencyEntry<unknown, T>
   >();
 
   public constructor(private readonly registrations: RegistrationMap<T>) {
     super();
   }
 
-  public resolveDependencyStatus<K extends keyof T>(
+  public override getEntry<K extends keyof T>(
     key: K,
-  ): { present: boolean; value?: T[K] } {
-    // If we've cached the value, use that.
-    if (this.resolvedDependencies.has(key)) {
-      return {
-        present: true,
-        value: this.resolvedDependencies.get(key) as T[K],
-      };
+  ): DependencyEntry<T[K], T> | undefined {
+    if (!this.entries.has(key)) {
+      const registration = this.registrations[key];
+      if (!registration) {
+        return undefined;
+      }
+      this.entries.set(key, new DependencyEntry<T[K], T>(key, registration));
     }
-
-    // Or, if we have it registered, utilize the registration.
-    const registration = this.registrations[key];
-    if (registration) {
-      return this.resolveRegisteredDependencyStatus(key, registration);
-    }
-
-    // Otherwise, we can't provide the depenendency.
-    return { present: false };
-  }
-
-  private resolveRegisteredDependencyStatus<K extends keyof T>(
-    key: K,
-    registration: RegistrationMap<T>[K],
-  ): { present: true; value: T[K] } {
-    const value =
-      registration.type === "instance"
-        ? registration.instance
-        : registration.factory(this);
-    if (registration.type !== "factory" || !registration.transient) {
-      this.resolvedDependencies.set(key, value);
-    }
-    return {
-      present: true,
-      value: this.resolvedDependencies.get(key) as T[K],
-    };
+    return this.entries.get(key) as DependencyEntry<T[K], T> | undefined;
   }
 }

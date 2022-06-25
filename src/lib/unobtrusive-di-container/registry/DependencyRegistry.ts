@@ -1,22 +1,23 @@
 import { BaseDependencyMap } from "../BaseDependencyMap";
+import { DependencyEntry } from "../DependencyEntry";
 
 /** Provides access to previously-registered dependencies */
 export abstract class DependencyRegistry<T = BaseDependencyMap> {
   public resolveDependency<K extends keyof T>(key: K): T[K] {
-    const dependency = this.resolveDependencyStatus(key);
-    if (!dependency.present) {
-      throw new Error(`Missing dependency with key ${key}`);
+    const dependencyEntry = this.getEntry(key);
+    if (!dependencyEntry) {
+      throw new Error(`Missing dependency with key ${key.toString()}`);
     }
-    return dependency.value!;
+    return dependencyEntry.getValue(this);
   }
 
   public resolveOptionalDependency<K extends keyof T>(
     key: K,
   ): T[K] | undefined {
-    return this.resolveDependencyStatus(key).value;
+    return this.getEntry(key)?.getValue(this);
   }
 
-  abstract resolveDependencyStatus<K extends keyof T>(
+  public abstract getEntry<K extends keyof T>(
     key: K,
-  ): { present: boolean; value?: T[K] };
+  ): DependencyEntry<T[K], T> | undefined;
 }
