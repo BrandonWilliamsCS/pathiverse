@@ -13,14 +13,14 @@ import { SessionViewer } from "./SessionViewer";
 export function StoryScreen<Sc extends Scene, U>() {
   const { storyId } = useParams();
   const getDependencies = useDependencies<DependencyMap<Sc, U>>();
-  const sessionGenerator = getDependencies("initialSessionGenerator");
+  const rootPathiverseModel = getDependencies("rootPathiverseModel");
   const registerStoryDependencies = getDependencies(
     "registerStoryDependencies",
   );
   const [session, setSession] = React.useState<Session<Sc, U>>();
   React.useEffect(() => {
-    sessionGenerator(storyId!).then(setSession);
-  }, [sessionGenerator, storyId]);
+    rootPathiverseModel.generateInitialSession(storyId!).then(setSession);
+  }, [rootPathiverseModel, storyId]);
   return session ? (
     <DependencyProvider<StoryDependencyMap<Sc, U>>
       key={session.storySpecification.id}

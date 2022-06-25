@@ -7,12 +7,13 @@ import { StorySpecification } from "pathiverse/system/StorySpecification";
 import { StoryListViewer } from "./StoryListViewer";
 
 export function StorySelectionScreen<Sc extends Scene, U>() {
-  const storyListSource =
-    useDependencies<DependencyMap<Sc, U>>()("storyListSource");
+  const rootPathiverseModel = useDependencies<DependencyMap<Sc, U>>()(
+    "rootPathiverseModel",
+  );
   const [storyList, setStoryList] = React.useState<StorySpecification<U>[]>();
   React.useEffect(() => {
-    storyListSource().then(setStoryList);
-  }, [storyListSource]);
+    rootPathiverseModel.storyList.promiseNewestValue().then(setStoryList);
+  }, [rootPathiverseModel]);
   return storyList ? (
     <StoryListViewer storyList={storyList} />
   ) : (

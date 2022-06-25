@@ -1,22 +1,15 @@
 import { DependencyRegistrar } from "lib/unobtrusive-di-container";
-import { identity } from "lodash";
-
-import { Scene } from "pathiverse/kernel/Scene";
-import { encapsulateStoryReducer } from "pathiverse/kernel/story/encapsulateStoryReducer";
-import { StoryState } from "pathiverse/kernel/story/StoryState";
 import { buildResolveSceneBeforeAdvanceActionTransformer } from "pathiverse/system/resolveAndAdvanceScene/buildResolveSceneBeforeAdvanceActionTransformer";
-import { ResourceIndicator } from "pathiverse/system/resource/ResourceIndicator";
-import { StateSessionTracker } from "pathiverse/system/StateSessionTracker";
-import { StorySpecification } from "pathiverse/system/StorySpecification";
 import { buildCompositeInterfaceElementRenderer } from "platform/react/InterfaceElementRenderer";
+import { RootPathiverseModel } from "platform/react/RootPathiverseModel";
+import { SessionPathiverseModel } from "platform/react/SessionPathiverseModel";
+import { StoryApiModel } from "platform/react/StoryApiModel";
 import { indicatedContentRenderer } from "plugin/content/indicated/indicatedContentRenderer";
 import { markdownContentRenderer } from "plugin/content/markdown/markdownContentRenderer";
 import { plainTextContentRenderer } from "plugin/content/plainText/plainTextContentRenderer";
 import { actionInteractionOptionRenderer } from "plugin/interactionOption/action/actionInteractionOptionRenderer";
 import { ContentWithResponseScene } from "plugin/scene/contentWithResponse/ContentWithResponseScene";
 import { contentWithResponseSceneRenderer } from "plugin/scene/contentWithResponse/contentWithResponseSceneRenderer";
-import { getJsonResource } from "util/getJsonResource";
-import { getRawResource } from "util/getRawResource";
 import { DependencyMap, StoryDependencyMap } from "./DependencyMap";
 
 export type HostedSceneType = ContentWithResponseScene;
@@ -37,8 +30,14 @@ export function registerDependencies(
       actionInteractionOptionRenderer,
     ]),
   );
-  registrar.registerInstance("storyListSource", getStoryList);
-  registrar.registerInstance("initialSessionGenerator", generateInitialSession);
+  registrar.registerInstance(
+    "storyApiModel",
+    new StoryApiModel("http://localhost:3001"),
+  );
+  registrar.registerFactory("rootPathiverseModel", (registry) => {
+    const storyApiModel = registry.resolveDependency("storyApiModel");
+    return new RootPathiverseModel(storyApiModel);
+  });
   registrar.registerInstance(
     "registerStoryDependencies",
     registerStoryDependencies,
@@ -50,79 +49,21 @@ export function registerStoryDependencies(
     StoryDependencyMap<HostedSceneType, HostedUserStateType>
   >,
 ) {
-  registrar.registerFactory("sceneReader", (registry) => {
+  registrar.registerFactory("sessionPathiverseModel", (registry) => {
     const currentStory = registry.resolveDependency("currentStory");
-    return (indicator) => getScene(currentStory, indicator);
+    const storyApiModel = registry.resolveDependency("storyApiModel");
+    return new SessionPathiverseModel(storyApiModel, currentStory);
   });
   registrar.registerFactory("indicatedContentReader", (registry) => {
-    const currentStory = registry.resolveDependency("currentStory");
-    return (indicator) => getSceneContent(currentStory, indicator);
+    const sessionPathiverseModel = registry.resolveDependency(
+      "sessionPathiverseModel",
+    );
+    return (indicator) =>
+      sessionPathiverseModel.getContent(indicator).promiseNewestValue();
   });
   registrar.registerFactory("actionTransformer", (registry) =>
     buildResolveSceneBeforeAdvanceActionTransformer(
-      registry.resolveDependency("sceneReader"),
+      registry.resolveDependency("sessionPathiverseModel"),
     ),
   );
-}
-
-async function generateInitialSession<Sc extends Scene, U>(storyId: string) {
-  const storyList = await getStoryList<U>();
-  const storySpecification = storyList.find(
-    (storySpec) => storySpec.id === storyId,
-  );
-  if (!storySpecification) {
-    throw new Error(`Cannot find story with id ${storyId}`);
-  }
-  const initialScene = await getScene<Sc>(
-    storySpecification,
-    storySpecification.initialSceneIndicator,
-  );
-  return {
-    storySpecification,
-    stateSessionTracker: new StateSessionTracker<StoryState<Sc, U>>(
-      encapsulateStoryReducer<Sc, U>(
-        initialScene,
-        identity,
-        storySpecification.initialUserState,
-      ),
-    ),
-  };
-}
-
-function getStoryList<U>() {
-  return getJsonResource<StorySpecification<U>[]>("/api/story/list.json");
-}
-
-function getScene<Sc>(
-  storySpec: StorySpecification<any>,
-  sceneIndicator: ResourceIndicator,
-) {
-  return getJsonResource<Sc>(
-    joinPaths(["/api/story", storySpec.id, "/scene", sceneIndicator.value]),
-  );
-}
-
-function getSceneContent(
-  storySpec: StorySpecification<any>,
-  contentIndicator: ResourceIndicator,
-) {
-  return getRawResource(
-    joinPaths(["/api/story", storySpec.id, "/content", contentIndicator.value]),
-  );
-}
-
-function joinPaths(parts: string[]) {
-  const separator = "/";
-  parts = parts.map((part, i) => {
-    // Remove leading slashes, except for the first part
-    if (i > 0 && part.startsWith(separator)) {
-      part = part.substring(separator.length);
-    }
-    // Remove trailing slashes, except for the first part
-    if (i !== parts.length - 1 && part.endsWith(separator)) {
-      part = part.substring(0, part.length - separator.length);
-    }
-    return part;
-  });
-  return parts.join(separator);
 }

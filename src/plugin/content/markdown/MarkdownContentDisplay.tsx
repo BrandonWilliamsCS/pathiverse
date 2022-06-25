@@ -7,7 +7,7 @@ export interface MarkdownContentDisplayProps {
   content: MarkdownContent;
 }
 
-/** Displays "markdown" content by simply rendering the text directly. */ //!!
+/** Displays "markdown" content by interpreting as CommonMark */
 export const MarkdownContentDisplay: React.FC<MarkdownContentDisplayProps> = ({
   content,
 }) => {
