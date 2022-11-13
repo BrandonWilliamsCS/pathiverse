@@ -14,9 +14,9 @@
     "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.36",
     "electron": "^18.2.4",
-    "electron-builder": "^22.4.1",
+    "electron-builder": "^22.14.13",
     "electron-webpack": "^2.8.2",
-    "replace": "^1.2.1",
+    "replace": "^1.2.2",
     "typescript": "^4.6.4",
     "webpack": "~4.42.1"
   },
