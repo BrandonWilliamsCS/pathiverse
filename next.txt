@@ -1,0 +1,105 @@
+Next steps:
+
+Re-architect layers
+host-oriented (config & setup)
+branding
+very simple user values
+-maybe no expressions yet. Just string literals
+-templates
+
+didn't actually finish upgrading React - need new client root thing
+-https://reactjs.org/blog/2022/03/08/react-18-upgrade-guide.html
+
+
+improvements:
+-display user state in content (specialized transform-me-first content types)
+-conditional interaction options
+-temporary alt story list
+-upgrade to session
+-rewind and fast-forward button
+-styles
+-support aboslute http story paths
+-browser back button
+-better detection for unsupported interface element
+-use valuemodel gate fr loading status
+
+error handling:
+-server crashes on error
+-missing InterfaceElementRenderer fails silently
+
+
+busywork:
+-run instructions
+--`npm run build` in root
+--then `npm start` in server
+--OR `npm run all` in electron
+--may be good to delete electron/dist first
+-separate electron build and dist
+-trim junk files from renderer, like logo images (probably JUST copy index + static, once sample ready)
+-update notes and documentation
+-bundle certain host stuff into models (esp. api)
+-flatten ResourceIndicator - glorified URI
+-much of host-level DependencyMap types are actually just platform-level
+
+
+notes:
+-"full session" tracking must be opt-in! Longer-format or game-like stories don't need that
+--or, a partial history for SOME back button.
+-story spec isn't necessarily portable - it often contains absolute path to story dir
+
+
+
+UPGRADE TO "SESSION"
+-rename "StateSessionTracker" to "StateSessionTracker"
+--there is no story involved
+--the model isn't a session, it's just keeping a pointer to one
+--although "session" may be overloaded. Sequence/history, but also metadata
+-need to have full chain from start to current
+--otherwise, true back button is impossible
+--always starts and ends with state
+--could extend StateCapsule to StateSessionCapsule
+-api
+--full session and change stream
+--current state and state change stream
+--apply action (synchronously, post-transform)
+--"revert" to certain state or a certain number of actions
+-"tracker" aspect may do very little beyond storing the "current" session. Any better than BehaviorSubject?
+--back-then-forward requires a separate "pointer" - maybe this is in the tracker.
+
+======
+
+!! not excited about browser refresh/back behavior. Url can't generally include full state/session info, so would need to delegate to session id... and then every new state would need to be saved immediately? That causes even more architecture changes as changes need to go through the API. Seems a lot less customizable that way.
+-server almost becomes separate host? or two-part react host tightly coupled to server.
+
+Kernel code (and most of system) could move to web api. things run in terms of sessions, and actions are applied to each. then the front end mostly works by getting the current state, displaying it, and sending actions back. Storage could get tricky because you'd need to support multiple session options.
+
+For now, just want to focus on electron host/platform/whatever. Server is glorified FS interface. Load list, session, scene, content, and whatever else from it and then save full session state as desired.
+
+Regardless, UI needs to treat action application as async. The kernel still works sync, but there will be stuff before and after the kernel part that makes the whole thing async. Maybe this means putting session stuff into a new Kernel layer?!?
+
+
+What would a writer app look like?
+For one, probably a truly separate deal. Can run both programs separately for somewhat live testing
+-page refresh may be practically necessary for that particular perk.
+Self-contained electron app - don't even pretend to do regular web app.
+Just like main app, looks at story list, and can drill down into one. OR create new!
+Create new asks for a few basic details and makes assumptions about things like paths.
+-basically just name and id, then assume relative path and initial scene is called "start".
+Then, just a graph of names connected by path labels.
+-small form gets id, name, and responsePrompt
+-assume scene and content file paths are just id with appropriate extension (json or md)
+https://github.com/uber/react-digraph
+-actually, that's all SVG? Not sure that's easy enough to work with. Might just have a top-level (immutable) list of all scenes. 
+
+Architecture:
+Kernel can have another layer: session
+PLATFORM is split into react client + express server.
+-react client is bascially the same CRA app, but designed around a server
+-server ONLY provides the api as an express "router"
+It's the HOST that decides to serve both the app and the api
+-provides config/startup behavior by serving standalone files alongside the app
+Really want a way to easily test platform without full electron build!
+
+** "platform" dir is probably MOST of front-end piece. Plugins and host are still separate.
+-host would be excluded from build and instead loaded separately like with config
+-Session drops from host, goes into kernel/session
